@@ -34,8 +34,8 @@ const MovieItemV2 = ({ data, state }) => {
       flexDirection={"column"}
       width={1}
       flex={1}
-      mt={isMobile ? 1 : 0}
-      mx={isMobile ? 3 : 6}
+      pt={isMobile ? 1 : 0}
+      px={isMobile ? 3 : 6}
     >
       <Typography variant="h4" fontWeight={400}>
         {title}
