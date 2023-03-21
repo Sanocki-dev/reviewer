@@ -4,7 +4,7 @@ import { Close, Logout } from "@mui/icons-material";
 import Navigation, { StyledMenu } from "./Navigation/Navigation";
 import Followers from "./Followers/Followers";
 import NavigationItem from "./Navigation/NavigationItem";
-import logo from '@/assets/r8hub_Logo_Light.svg'
+import logo from "/assets/r8hub_logo_light.svg"
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
