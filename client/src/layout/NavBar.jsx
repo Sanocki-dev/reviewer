@@ -13,6 +13,7 @@ const NavBar = ({ sidebarHandler, currentState }) => {
         height: "6rem",
         display: "flex",
         alignItems: "center",
+        pr:4
       }}
     >
       <SidebarControls
@@ -28,7 +29,7 @@ const NavBar = ({ sidebarHandler, currentState }) => {
         justifyContent={"space-between"}
       >
         <SearchBar />
-        <ProfileActions />
+        {/* <ProfileActions /> */}
       </Box>
     </Box>
   );

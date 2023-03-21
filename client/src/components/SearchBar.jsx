@@ -60,7 +60,8 @@ const SearchBar = () => {
       border="1px solid"
       borderColor="neutral.light"
       borderRadius={4}
-      width="61%"
+      width="100%"
+      maxWidth={700}
       display="flex"
       transition="width .3s ease-in-out"
     >

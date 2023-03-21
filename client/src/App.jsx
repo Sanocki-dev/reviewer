@@ -22,11 +22,10 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/search/*" element={<SearchPage />} />
+              <Route path="/search*" element={<SearchPage />} />
               <Route path="/comingsoon" element={<HomePage />} />
               <Route path="/watchlist" element={<HomePage />} />
               <Route path="/:id" element={<HomePage />} />
-
             </Routes>
           </Layout>
         </ThemeProvider>

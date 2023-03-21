@@ -24,10 +24,11 @@ const SidebarControls = ({ onClickHandler, currentState }) => {
   return (
     <Box
       ml={2}
-      width={mdQuery ? 110 : 150}
+      width={75 }
       sx={{ transition: "width .3s ease-in-out" }}
     >
-      {mdQuery ? Burger() : Arrows()}
+    {Burger()}
+      {/* {mdQuery ? Burger() : Arrows()} */}
     </Box>
   );
 };

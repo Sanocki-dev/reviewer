@@ -1,9 +1,10 @@
-import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
-import { Close, Logout, Menu } from "@mui/icons-material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
+import { Close, Logout } from "@mui/icons-material";
 
 import Navigation, { StyledMenu } from "./Navigation/Navigation";
 import Followers from "./Followers/Followers";
 import NavigationItem from "./Navigation/NavigationItem";
+import logo from '@/assets/r8hub_Logo_Light.svg'
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
@@ -27,16 +28,9 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
           transition: "margin 0.6s ease-in-out",
         }}
       >
-        <Typography
-          fontWeight="bold"
-          fontSize="clamp(1rem, 1.25rem, 1.5rem)"
-          sx={{ "&:hover": { cursor: "pointer" }, alignContent: "center" }}
-        >
-          R8.
-          <Box component={"span"} sx={{ color: "primary.main" }}>
-            hub
-          </Box>
-        </Typography>
+      <Box src={logo} alt="R8" height={50} width={70} component={'img'}
+         sx={{ "&:hover": { cursor: "pointer" }, alignContent: "center" }}
+      />
         {isMobile && (
           <IconButton onClick={onClick}>
             <Close />
