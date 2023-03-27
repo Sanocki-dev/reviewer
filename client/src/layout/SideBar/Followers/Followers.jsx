@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Transition } from "react-transition-group";
 
 import { People } from "../../mockData";
-import SectionHeader from "../SectionHeader";
+import SectionHeader from "../../../components/SectionHeader";
 import FollowerItem from "./FollowerItem";
 
 const Followers = ({ showFollowList }) => {

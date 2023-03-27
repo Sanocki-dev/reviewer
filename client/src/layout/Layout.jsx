@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import NavBar from "./NavBar";
-import SideBar from "./SideBar";
 
-const Layout = ({ children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+import NavBar from "./NavBar/NavBar";
+import SideBar from "./SideBar/Sidebar";
+
+const Layout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const theme = useTheme();
   const smQuery = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -21,13 +23,17 @@ const Layout = ({ children }) => {
         sx={{
           width:
             isSidebarOpen && smQuery
-              ? "100%"
+              ? "80%"
               : isSidebarOpen
               ? 300
               : smQuery
               ? 0
               : 100,
+          bgcolor:'background.alt',
+          height:'100%',
+          zIndex:1,
           transition: "all 1s ease-in-out",
+          position:smQuery && 'absolute',
           overflow: "hidden",
         }}
       >
@@ -43,12 +49,13 @@ const Layout = ({ children }) => {
         sx={{
           width: 0,
           overflow: "hidden",
-          opacity: isSidebarOpen && smQuery ? 0 : 1,
+          opacity: isSidebarOpen && smQuery ? 0.25 : 1,
           transition: "opacity .3s ease-in-out",
+          pointerEvents: isSidebarOpen && smQuery && "none",
         }}
       >
         <NavBar sidebarHandler={sidebarHandler} currentState={isSidebarOpen} />
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );

@@ -1,12 +1,10 @@
 import { Box } from "@mui/material";
 
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "./SearchBar";
 import SidebarControls from "./SidebarControls";
-import ProfileActions from "./ProfileActions";
+// import ProfileActions from "./ProfileActions";
 
 const NavBar = ({ sidebarHandler, currentState }) => {
-  // THEME
-
   return (
     <Box
       sx={{

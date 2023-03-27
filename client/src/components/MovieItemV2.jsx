@@ -46,6 +46,7 @@ const MovieItemV2 = ({ data, state }) => {
       <Box>
         {genre_ids.map((id) => (
           <Chip
+            key={id}
             sx={{
               mr: 1,
               my: 1,
@@ -84,7 +85,7 @@ const MovieItemV2 = ({ data, state }) => {
         <Box
           sx={{
             height: 200,
-            maxWidth: 150,
+            width: 150,
             objectFit: "fit",
             borderRadius: "20px",
           }}

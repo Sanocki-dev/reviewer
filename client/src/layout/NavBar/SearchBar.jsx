@@ -1,4 +1,4 @@
-import { CheckBox, Search, Tune } from "@mui/icons-material";
+import { Search, Tune } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -7,22 +7,16 @@ import {
   FormGroup,
   IconButton,
   InputBase,
-  MenuItem,
   Popover,
   Rating,
-  Select,
-  Slider,
   Typography,
   useTheme,
 } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setMovies } from "@/store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 
 const SearchBar = () => {
   const [params, setParams] = useState("");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [filterAnchor, setFilterAnchor] = useState(null);
 
@@ -31,25 +25,15 @@ const SearchBar = () => {
 
   const neutralMedium = theme.palette.neutral.medium;
 
-  const fetchData = async (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const BASE_URL =
-      import.meta.env.VITE_BASE_SEARCH_URL +
-      "&query=" +
-      params +
-      "&page=1&sort_by=primary_release_date.desc&append_to_response=reviews";
+    const query = { query: params, page: 1 };
 
-    const response = await fetch(
-      BASE_URL,
-      {
-        method: "GET",
-      }
-    );
-
-    const searchResults = await response.json();
-    dispatch(setMovies(searchResults.results));
-    navigate("/search?" + params);
+    navigate({
+      pathname: "/search",
+      search: `${createSearchParams(query)}`,
+    });
   };
 
   const open = Boolean(filterAnchor);
@@ -65,7 +49,7 @@ const SearchBar = () => {
       display="flex"
       transition="width .3s ease-in-out"
     >
-      <form action="post" onSubmit={fetchData}>
+      <form action="post" onSubmit={onSubmitHandler}>
         <IconButton
           disabled
           disableRipple

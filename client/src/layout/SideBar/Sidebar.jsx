@@ -1,5 +1,5 @@
 import { Box, IconButton, useMediaQuery } from "@mui/material";
-import { Close, Logout } from "@mui/icons-material";
+import { Logout, Menu } from "@mui/icons-material";
 
 import Navigation, { StyledMenu } from "./Navigation/Navigation";
 import Followers from "./Followers/Followers";
@@ -33,17 +33,13 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
       />
         {isMobile && (
           <IconButton onClick={onClick}>
-            <Close />
+            <Menu />
           </IconButton>
         )}
       </Box>
 
       <Navigation showFollowsIcon={showFollowers} isOpen={isOpen} />
-
-      {/* Following section */}
       <Followers showFollowList={showFollowers} />
-
-      {/* Logout Section */}
 
       <StyledMenu
         sx={{

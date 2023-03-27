@@ -127,6 +127,7 @@ const Image = ({ imageURL, title }) => (
     sx={{
       width: "95%",
       height: 320,
+      // width:300,
       borderBottom: "2px solid transparent",
       objectFit: "cover",
       objectPosition: "top",

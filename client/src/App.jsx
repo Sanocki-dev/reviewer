@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Box } from "@mui/system";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
@@ -9,6 +8,18 @@ import SearchPage from "@/pages/SearchPage";
 import Layout from "@/layout/Layout";
 
 import { themeSettings } from "@/theme";
+import { loader } from "@/pages/SearchPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "", element: <HomePage /> },
+      { path: "/search*", element: <SearchPage />, loader: loader },
+    ],
+  },
+]);
 
 function App() {
   const [mode, setMode] = useState("dark");
@@ -16,20 +27,10 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Layout>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/search*" element={<SearchPage />} />
-              <Route path="/comingsoon" element={<HomePage />} />
-              <Route path="/watchlist" element={<HomePage />} />
-              <Route path="/:id" element={<HomePage />} />
-            </Routes>
-          </Layout>
-        </ThemeProvider>
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </div>
   );
 }

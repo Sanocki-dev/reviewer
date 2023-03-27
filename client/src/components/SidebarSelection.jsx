@@ -1,13 +1,10 @@
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 
 const SidebarSelection = () => {
-  const theme = useTheme();
-  const primaryMain = theme.palette.primary.main;
-
   return (
     <Box
       sx={{
-        bgcolor: primaryMain,
+        bgcolor: "primary.main",
         width: "3px",
         height: "100%",
         borderRadius: "0 5px 5px 0",
