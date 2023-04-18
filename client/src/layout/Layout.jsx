@@ -1,16 +1,19 @@
-import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { Transition } from "react-transition-group";
 
 import NavBar from "./NavBar/NavBar";
 import SideBar from "./SideBar/Sidebar";
+import { toggleSidebar } from "@/store";
 
 const Layout = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isSidebarOpen = useSelector((state) => state.isSidebarOpen);
+  const dispatch = useDispatch();
   const theme = useTheme();
   const smQuery = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const sidebarHandler = () => setIsSidebarOpen((state) => !state);
+  const sidebarHandler = () => dispatch(toggleSidebar());
 
   return (
     <Box
@@ -29,11 +32,11 @@ const Layout = () => {
               : smQuery
               ? 0
               : 100,
-          bgcolor:'background.alt',
-          height:'100%',
-          zIndex:1,
+          bgcolor: "background.alt",
+          height: "100%",
+          zIndex: 1,
           transition: "all 1s ease-in-out",
-          position:smQuery && 'absolute',
+          position: smQuery && "absolute",
           overflow: "hidden",
         }}
       >
@@ -43,6 +46,28 @@ const Layout = () => {
           isMobile={smQuery}
         />
       </Box>
+      <Transition
+        in={Boolean(smQuery && isSidebarOpen)}
+        timeout={800}
+        mountOnEnter
+        unmountOnExit
+      >
+        {(state) => (
+          <Box
+            height="100%"
+            width="20%"
+            bgcolor={"primary.main"}
+            position="absolute"
+            right={0}
+            zIndex={1}
+            sx={{ transition: "bottom .87s ease-in-out" }}
+            bottom={state == "entered" || state == "entering" ? 0 : 1000}
+            onClick={() => {
+              setIsSidebarOpen(false);
+            }}
+          />
+        )}
+      </Transition>
       <Box
         maxHeight={"100%"}
         flex={1}
@@ -54,7 +79,7 @@ const Layout = () => {
           pointerEvents: isSidebarOpen && smQuery && "none",
         }}
       >
-        <NavBar sidebarHandler={sidebarHandler} currentState={isSidebarOpen} />
+        <NavBar />
         <Outlet />
       </Box>
     </Box>

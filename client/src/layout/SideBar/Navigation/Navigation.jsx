@@ -27,7 +27,6 @@ const Navigation = ({ isOpen, showFollowsIcon }) => {
           icon={<FavoriteBorder />}
           showText={isOpen}
         />
-
         <NavigationItem
           to={"/watchlist"}
           text="Watchlist"

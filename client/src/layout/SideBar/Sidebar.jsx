@@ -4,10 +4,12 @@ import { Logout, Menu } from "@mui/icons-material";
 import Navigation, { StyledMenu } from "./Navigation/Navigation";
 import Followers from "./Followers/Followers";
 import NavigationItem from "./Navigation/NavigationItem";
-import logo from "/assets/r8hub_logo_light.svg"
+import logo from "/assets/r8hub_logo_light.svg";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
+  const navigate = useNavigate();
   const showFollowers = followerShowingQuery && isOpen;
 
   return (
@@ -16,6 +18,7 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
       position={"relative"}
       borderRight="1px solid"
       borderColor="neutral.light"
+      zIndex={3}
     >
       <Box
         sx={{
@@ -24,13 +27,22 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
           alignItems: "center",
           justifyContent: "space-between",
           ml: isOpen ? 5 : 1.75,
-          pr:2,
+          pr: 2,
           transition: "margin 0.6s ease-in-out",
         }}
       >
-      <Box src={logo} alt="R8" height={50} width={70} component={'img'}
-         sx={{ "&:hover": { cursor: "pointer" }, alignContent: "center" }}
-      />
+        <Box
+          src={logo}
+          alt="R8Logo"
+          component={"img"}
+          sx={{
+            "&:hover": { cursor: "pointer" },
+            alignContent: "center",
+            width: 70,
+            height: 50,
+          }}
+          onClick={() => navigate("/home")}
+        />
         {isMobile && (
           <IconButton onClick={onClick}>
             <Menu />

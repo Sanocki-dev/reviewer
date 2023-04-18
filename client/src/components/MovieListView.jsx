@@ -2,33 +2,22 @@ import { FavoriteBorder, Visibility, WatchLater } from "@mui/icons-material";
 import {
   Box,
   Chip,
-  Grid,
   IconButton,
   Typography,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
+
 import { genres } from "./Genres";
-import IMDBRating from "./IMDBRating";
+import ScoreCircle from "./ScoreCircle";
 
-const MovieItemV2 = ({ data, state }) => {
-  const {
-    title,
-    poster_path,
-    release_date,
-    genre_ids,
-    overview,
-    vote_count,
-    vote_average,
-  } = data;
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+const MovieListView = ({ movies }) => {
+  const imageURL = "https://image.tmdb.org/t/p/w500/";
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const noImageURL =
+    "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
 
-  const imageURL = poster_path
-    ? "https://image.tmdb.org/t/p/w500/" + poster_path
-    : "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
-
-  const OverviewSection = () => (
+  // Text section that moves depending on screen size
+  const OverviewSection = (title, release_date, genre_ids, overview) => (
     <Box
       display="flex"
       flexDirection={"column"}
@@ -41,10 +30,10 @@ const MovieItemV2 = ({ data, state }) => {
         {title}
       </Typography>
       <Typography variant="subtitle2" fontWeight={400}>
-        {release_date.slice(0, 4)}
+        {release_date?.slice(0, 4) || "N/A"}
       </Typography>
       <Box>
-        {genre_ids.map((id) => (
+        {genre_ids?.map((id) => (
           <Chip
             key={id}
             sx={{
@@ -63,25 +52,17 @@ const MovieItemV2 = ({ data, state }) => {
     </Box>
   );
 
-  return (
-    <Box
-      sx={{
-        position: "relative",
-        opacity: state === "entered" ? 1 : 0,
-        mt: state === 'entered' ? 0 : 200,
-        width:1,
-        transition: "all .5s ease-in-out",
-      }}
-    >
-      <Grid
-        item
-        xs={12}
-        sx={{
-          display: "flex",
-          justifyContent: isMobile ? "space-between" : "initial",
-          mx: 2,
-        }}
-      >
+  return movies?.map(
+    ({
+      title,
+      poster_path,
+      release_date,
+      genre_ids,
+      overview,
+      vote_count,
+      vote_average,
+    }) => (
+      <Box width={1} display="flex">
         <Box
           sx={{
             height: 200,
@@ -90,17 +71,17 @@ const MovieItemV2 = ({ data, state }) => {
             borderRadius: "20px",
           }}
           component={"img"}
-          src={imageURL}
+          src={poster_path ? imageURL + poster_path : noImageURL}
           alt={title + " image"}
         />
-        {!isMobile && OverviewSection()}
+        {!isMobile && OverviewSection(title, release_date, genre_ids, overview)}
         <Box
           display="flex"
           flexDirection={"column"}
           alignItems="center"
           minWidth={100}
         >
-          <IMDBRating score={vote_average} total={vote_count} isPlaced />
+          <ScoreCircle score={vote_average} total={vote_count} isPlaced />
           <IconButton>
             <WatchLater />
           </IconButton>
@@ -111,10 +92,10 @@ const MovieItemV2 = ({ data, state }) => {
             <Visibility />
           </IconButton>
         </Box>
-      </Grid>
-      {isMobile && OverviewSection()}
-    </Box>
+        {isMobile && OverviewSection(title, release_date, genre_ids, overview)}
+      </Box>
+    )
   );
 };
 
-export default MovieItemV2;
+export default MovieListView;

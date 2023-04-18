@@ -5,6 +5,7 @@ import {
   ListItemText,
   MenuItem,
   MenuList,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { Transition } from "react-transition-group";
@@ -22,10 +23,19 @@ const Followers = ({ showFollowList }) => {
       {(showList) => (
         <>
           <StyledDivider showing={showList === "entered"} />
-          <SectionHeader
-            isShowing={showList === "entered"}
-            children="Following"
-          />
+          <Typography
+            sx={{
+              color: "neutral.medium",
+              fontWeight: "bold",
+              fontSize: 12,
+              pb: 1,
+              ml: showList === "entered" ? 4 : -20,
+              opacity: showList === "entered" ? 1 : 0,
+              transition: "all .8s ease-in-out",
+            }}
+          >
+            Following
+          </Typography>
           <StlyedList state={showList}>
             {people.slice(0, 8).map(({ id, first_name, avatar }) => (
               <FollowerItem

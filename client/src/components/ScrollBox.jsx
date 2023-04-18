@@ -1,28 +1,47 @@
-import React from "react";
-import { Box, useTheme } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { Box } from "@mui/material";
 
-const ScrollBox = ({ sx, children }) => {
-  const theme = useTheme();
+const ScrollBox = (props) => {
+  const { sx, children, horizontal, ...others } = props;
 
-  const neutralMedium = theme.palette.neutral.medium;
-  
+  const scroller = useRef();
+
+  const handleHorizontalScroll = (e) => {
+    if (!horizontal) return;
+    e.preventDefault();
+    scroller.current.scrollLeft += e.deltaY;
+  };
+
+  useEffect(() => {
+    if (scroller.current)
+      scroller.current.addEventListener("wheel", handleHorizontalScroll);
+    return () => {
+      if (scroller.current)
+        scroller.current.removeEventListener("wheel", handleHorizontalScroll);
+    };
+  }, [scroller]);
+
   return (
     <Box
+      ref={scroller}
       sx={{
-        ...sx,
-
-        overflowY: "scroll",
+        overflowY: "auto",
+        overflowX: horizontal && "auto",
         "&::-webkit-scrollbar": {
           width: "0.3em",
+          height: "0.3em",
+          display: horizontal && "none",
         },
         "&::-webkit-scrollbar-track": {
           boxShadow: `inset 0 0 6px black`,
         },
         "&::-webkit-scrollbar-thumb": {
           borderRadius: 4,
-          backgroundColor: neutralMedium,
+          backgroundColor: "neutral.medium",
         },
+        ...sx,
       }}
+      {...others}
     >
       {children}
     </Box>

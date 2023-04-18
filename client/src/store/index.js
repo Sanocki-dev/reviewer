@@ -4,7 +4,7 @@ const initialState = {
   mode: "dark",
   user: null,
   token: null,
-  movies: [],
+  isSidebarOpen: false,
 };
 
 export const authSlice = createSlice({
@@ -34,13 +34,13 @@ export const authSlice = createSlice({
         console.log("User friends non-existent :");
       }
     },
-    // Sets the movies currently being displayed
-    setMovies: (state, action) => {
-      state.movies = action.payload;
+    // Toggles the sidebar
+    toggleSidebar: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen;
     },
   },
 });
 
-export const { setMode, setLogin, setLogout, setFollowers, setMovies } =
+export const { setMode, setLogin, setLogout, setFollowers, toggleSidebar } =
   authSlice.actions;
 export default authSlice.reducer;

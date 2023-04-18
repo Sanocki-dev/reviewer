@@ -4,20 +4,17 @@ import SearchBar from "./SearchBar";
 import SidebarControls from "./SidebarControls";
 // import ProfileActions from "./ProfileActions";
 
-const NavBar = ({ sidebarHandler, currentState }) => {
+const NavBar = () => {
   return (
     <Box
       sx={{
         height: "6rem",
         display: "flex",
         alignItems: "center",
-        pr:4
+        pr: 4,
       }}
     >
-      <SidebarControls
-        currentState={currentState}
-        onClickHandler={sidebarHandler}
-      />
+      <SidebarControls />
 
       <Box
         display="flex"

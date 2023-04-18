@@ -1,20 +1,22 @@
-import { Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 
-const SectionHeader = ({ isShowing, children }) => {
+const SectionHeader = ({ title, onClick }) => {
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   return (
-    <Typography
-      sx={{
-        color: "neutral.medium",
-        fontWeight: "bold",
-        fontSize: 12,
-        pb: 1,
-        ml: isShowing ? 4 : -20,
-        opacity: isShowing ? 1 : 0,
-        transition: "all .8s ease-in-out",
-      }}
-    >
-      {children}
-    </Typography>
+    <Box display="flex" alignItems={"flex-end"}>
+      <Typography variant="h1" fontSize={isMobile ? 18 : 25} fontWeight="400">
+        {title}
+      </Typography>
+      {/* <Typography
+        component={"button"}
+        sx={{ all: "unset", ml: 3, fontSize: 12, cursor: "pointer" }}
+        variant="caption"
+        onClick={onClick}
+      >
+        Show All
+      </Typography> */}
+    </Box>
   );
 };
 

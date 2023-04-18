@@ -1,84 +1,82 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  Pagination,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { TableRows, Window } from "@mui/icons-material";
+import { Box, Pagination, Typography, useMediaQuery } from "@mui/material";
+
 import { Transition } from "react-transition-group";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 
 import ScrollBox from "@/components/ScrollBox";
-import MovieItem from "@/components/MovieItem";
-import MovieItemV2 from "@/components/MovieItemV2";
+import MovieListView from "@/components/MovieListView";
+import MovieGridView from "@/components/MovieGridView";
+import ViewChanger from "@/components/ViewChanger";
 
 const SearchPage = () => {
   const [isGridView, setIsGridView] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { results, page, total_pages } = useLoaderData();
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const neutralLight = theme.palette.neutral.light;
-  const alt = theme.palette.background.alt;
-
-  const sortedMovies = results?.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const onPaginateHandler = (_, value) => {
     setSearchParams({ query: searchParams.get("query"), page: value });
   };
 
-  console.log(sortedMovies);
+  const onViewHandler = () => {
+    setIsGridView((state) => !state);
+  };
+
   return (
-    <ScrollBox
-      sx={{
-        position: "relative",
-        height: "100%",
-        maxHeight: "calc(100% - 6rem)",
-        p: isMobile ? 0 : 5,
-        pt: 0,
-      }}
-    >
-      <Box width={1} py={1} display="flex" justifyContent={"end"}>
-        <IconButton onClick={() => setIsGridView((state) => !state)}>
-          {isGridView ? <TableRows /> : <Window />}
-        </IconButton>
-      </Box>
-      <Grid container position="relative" rowGap={3}>
+    <>
+      <ViewChanger isGridView={isGridView} onClick={onViewHandler} />
+      <ScrollBox
+        sx={{
+          height: "calc(100% - 9.4rem)",
+        }}
+      >
         <Transition in={isGridView} timeout={300} unmountOnExit mountOnEnter>
-          {(state) =>
-            sortedMovies?.map((data) => (
-              <MovieItem state={state} key={data.id} data={data} />
-            ))
-          }
+          {(state) => (
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 1,
+                mx: isMobile ? 0 : 3,
+                opacity: state === "entered" ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+            >
+              <MovieGridView movies={results} />
+            </Box>
+          )}
         </Transition>
         <Transition in={!isGridView} timeout={300} unmountOnExit mountOnEnter>
-          {(state) =>
-            sortedMovies?.map((data) => (
-              <MovieItemV2 key={data.id} state={state} data={data} />
-            ))
-          }
+          {(state) => (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                mx: isMobile ? 0 : 3,
+                opacity: state === "entered" ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+            >
+              <MovieListView movies={results} />
+            </Box>
+          )}
         </Transition>
-      </Grid>
 
-      <Box
-        bottom={0}
-        position={"fixed"}
-        width="100%"
-        height={150}
-        sx={{
-          background:
-            "linear-gradient(0deg, " +
-            alt +
-            " 20%, " +
-            neutralLight +
-            "01 100%)",
-        }}
-      />
+        {results && (
+          <Box width={1} display="flex" justifyContent={"center"}>
+            <Pagination
+              sx={{ my: 7 }}
+              page={page}
+              count={total_pages}
+              onChange={onPaginateHandler}
+            />
+          </Box>
+        )}
+      </ScrollBox>
 
       {!results && (
         <Typography
@@ -90,24 +88,21 @@ const SearchPage = () => {
           No movies found
         </Typography>
       )}
-      <Pagination
-        sx={{ my: 7, display: "flex", justifyContent: "center" }}
-        page={page}
-        count={total_pages}
-        showFirstButton
-        showLastButton
-        onChange={onPaginateHandler}
-      />
-    </ScrollBox>
+    </>
   );
 };
 
 export default SearchPage;
 
-export const loader = async ({ request }) => {
+export const loader = async ({ request, params }) => {
   const { search } = new URL(request.url);
+  const { VITE_API_KEY } = import.meta.env;
 
-  const url = import.meta.env.VITE_BASE_SEARCH_URL + search.replace("?", "&");
+  const url =
+    "https://api.themoviedb.org/3/search/movie" +
+    search +
+    "&api_key=" +
+    VITE_API_KEY;
 
   const response = await fetch(url, {
     method: "GET",
