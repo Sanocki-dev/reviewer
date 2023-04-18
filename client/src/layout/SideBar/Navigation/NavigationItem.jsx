@@ -2,6 +2,7 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -21,17 +22,19 @@ const NavigationItem = ({ text, icon, to, showText, sx }) => {
   };
 
   return (
-    <MenuItem selected={selected === to} onClick={onClickHandler} sx={sx}>
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText
-        sx={{
-          opacity: showText ? 1 : 0,
-          transition: "opacity 0.3s ease-in-out",
-        }}
-      >
-        {text}
-      </ListItemText>
-    </MenuItem>
+    <Tooltip disableHoverListener={showText} title={text} placement="right">
+      <MenuItem selected={selected === to} onClick={onClickHandler} sx={sx}>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText
+          sx={{
+            opacity: showText ? 1 : 0,
+            transition: "opacity 0.3s ease-in-out",
+          }}
+        >
+          {text}
+        </ListItemText>
+      </MenuItem>
+    </Tooltip>
   );
 };
 
