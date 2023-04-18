@@ -15,15 +15,11 @@ import {
 import { useState } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
 
-const SearchBar = () => {
+const SearchBar = ({ filled, placeholder, fullWidth }) => {
   const [params, setParams] = useState("");
-  const navigate = useNavigate();
   const [filterAnchor, setFilterAnchor] = useState(null);
 
-  // THEME
-  const theme = useTheme();
-
-  const neutralMedium = theme.palette.neutral.medium;
+  const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -45,15 +41,16 @@ const SearchBar = () => {
       borderColor="neutral.light"
       borderRadius={4}
       width="100%"
-      maxWidth={700}
+      maxWidth={fullWidth ? 'initial' : 700}
       display="flex"
       transition="width .3s ease-in-out"
+      bgcolor={filled ? "neutral.light" : "unset"}
     >
       <form action="post" onSubmit={onSubmitHandler}>
         <IconButton
           disabled
           disableRipple
-          sx={{ px: 2, svg: { color: neutralMedium } }}
+          sx={{ px: 2, svg: { color: "neutral.medium" } }}
         >
           <Search />
         </IconButton>
@@ -62,14 +59,14 @@ const SearchBar = () => {
           label="search"
           value={params}
           id="search_movies"
-          placeholder="Search Movies"
+          placeholder={placeholder || "Search Movies"}
           onChange={(e) => setParams(e.target.value)}
         />
         <div>
           <IconButton
             aria-describedby={id}
             disableRipple
-            sx={{ px: 2, svg: { color: neutralMedium } }}
+            sx={{ px: 2, svg: { color: "neutral.medium" } }}
             onClick={(e) => setFilterAnchor(e.currentTarget)}
           >
             <Tune />

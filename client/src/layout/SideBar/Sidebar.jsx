@@ -18,7 +18,6 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
       position={"relative"}
       borderRight="1px solid"
       borderColor="neutral.light"
-      zIndex={3}
     >
       <Box
         sx={{

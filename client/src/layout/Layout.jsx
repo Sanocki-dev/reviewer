@@ -34,7 +34,7 @@ const Layout = () => {
               : 100,
           bgcolor: "background.alt",
           height: "100%",
-          zIndex: 1,
+          zIndex: 100,
           transition: "all 1s ease-in-out",
           position: smQuery && "absolute",
           overflow: "hidden",
@@ -59,7 +59,7 @@ const Layout = () => {
             bgcolor={"primary.main"}
             position="absolute"
             right={0}
-            zIndex={1}
+            zIndex={100}
             sx={{ transition: "bottom .87s ease-in-out" }}
             bottom={state == "entered" || state == "entering" ? 0 : 1000}
             onClick={() => {

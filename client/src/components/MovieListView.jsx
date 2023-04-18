@@ -12,9 +12,10 @@ import ScoreCircle from "./ScoreCircle";
 
 const MovieListView = ({ movies }) => {
   const imageURL = "https://image.tmdb.org/t/p/w500/";
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const noImageURL =
     "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
+
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   // Text section that moves depending on screen size
   const OverviewSection = (title, release_date, genre_ids, overview) => (
@@ -62,38 +63,41 @@ const MovieListView = ({ movies }) => {
       vote_count,
       vote_average,
     }) => (
-      <Box width={1} display="flex">
-        <Box
-          sx={{
-            height: 200,
-            width: 150,
-            objectFit: "fit",
-            borderRadius: "20px",
-          }}
-          component={"img"}
-          src={poster_path ? imageURL + poster_path : noImageURL}
-          alt={title + " image"}
-        />
-        {!isMobile && OverviewSection(title, release_date, genre_ids, overview)}
-        <Box
-          display="flex"
-          flexDirection={"column"}
-          alignItems="center"
-          minWidth={100}
-        >
-          <ScoreCircle score={vote_average} total={vote_count} isPlaced />
-          <IconButton>
-            <WatchLater />
-          </IconButton>
-          <IconButton>
-            <FavoriteBorder />
-          </IconButton>
-          <IconButton>
-            <Visibility />
-          </IconButton>
+      <>
+        <Box display={"flex"} justifyContent='space-between' px={3}>
+          <Box
+            sx={{
+              height: 200,
+              width: 150,
+              objectFit: "fit",
+              borderRadius: "20px",
+            }}
+            component={"img"}
+            src={poster_path ? imageURL + poster_path : noImageURL}
+            alt={title + " image"}
+          />
+          {!isMobile &&
+            OverviewSection(title, release_date, genre_ids, overview)}
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            alignItems="center"
+            minWidth={100}
+          >
+            <ScoreCircle score={vote_average} total={vote_count} isPlaced />
+            <IconButton>
+              <WatchLater />
+            </IconButton>
+            <IconButton>
+              <FavoriteBorder />
+            </IconButton>
+            <IconButton>
+              <Visibility />
+            </IconButton>
+          </Box>
         </Box>
         {isMobile && OverviewSection(title, release_date, genre_ids, overview)}
-      </Box>
+      </>
     )
   );
 };
