@@ -8,7 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { toggleSidebar } from "@/store";
+import { toggleSidebar } from "@/context";
 
 const NavigationItem = ({ text, icon, to, showText, sx }) => {
   const selected = window.location.pathname.toLowerCase();

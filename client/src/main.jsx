@@ -17,7 +17,7 @@ import storage from "redux-persist/lib/storage";
 
 import App from "./App";
 import "./index.css";
-import authReducter from "@/store";
+import authReducter from "@/context";
 
 const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducter);

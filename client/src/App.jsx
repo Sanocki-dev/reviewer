@@ -6,15 +6,13 @@ import {
 } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-
-import HomePage from "@/pages/HomePage/HomePage";
-import SearchPage from "@/pages/SearchPage";
-import Layout from "@/layout/Layout";
-
-import { themeSettings } from "@/theme";
-import { loader as SearchLoader } from "@/pages/SearchPage";
-import { loader as HomeLoader } from "@/pages/HomePage/HomePage";
 import { useSelector } from "react-redux";
+
+import Layout from "@/layouts";
+import { themeSettings } from "@/theme";
+
+import HomePage, { loader as HomeLoader } from "@/pages/HomePage";
+import SearchPage, { loader as SearchLoader } from "@/pages/SearchPage";
 
 const router = createBrowserRouter([
   {

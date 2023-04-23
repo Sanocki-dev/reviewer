@@ -1,13 +1,10 @@
+import { useState } from "react";
 import { Box, Pagination, Typography, useMediaQuery } from "@mui/material";
-
 import { Transition } from "react-transition-group";
 import { useLoaderData, useSearchParams } from "react-router-dom";
-import { useState } from "react";
 
-import ScrollBox from "@/components/ScrollBox";
-import MovieListView from "@/components/MovieListView";
-import MovieGridView from "@/components/MovieGridView";
-import ViewChanger from "@/components/ViewChanger";
+import ScrollBox from "@/components/ui/ScrollBox";
+import { GridView, ListView, ViewChanger } from "@/features/movieView";
 
 const SearchPage = () => {
   const [isGridView, setIsGridView] = useState(false);
@@ -45,7 +42,7 @@ const SearchPage = () => {
                 transition: "opacity 1s ease-in-out",
               }}
             >
-              <MovieGridView movies={results} />
+              <GridView movies={results} />
             </Box>
           )}
         </Transition>
@@ -61,7 +58,7 @@ const SearchPage = () => {
                 transition: "opacity 1s ease-in-out",
               }}
             >
-              <MovieListView movies={results} />
+              <ListView movies={results} />
             </Box>
           )}
         </Transition>

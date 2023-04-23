@@ -3,9 +3,9 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 
-import NavBar from "./NavBar/NavBar";
-import SideBar from "./SideBar/Sidebar";
-import { toggleSidebar } from "@/store";
+import NavBar from "./navbar/NavBar";
+import SideBar from "./sidebar/Sidebar";
+import { toggleSidebar } from "@/context";
 
 const Layout = () => {
   const isSidebarOpen = useSelector((state) => state.isSidebarOpen);
@@ -62,9 +62,7 @@ const Layout = () => {
             zIndex={100}
             sx={{ transition: "bottom .87s ease-in-out" }}
             bottom={state == "entered" || state == "entering" ? 0 : 1000}
-            onClick={() => {
-              setIsSidebarOpen(false);
-            }}
+            onClick={sidebarHandler}
           />
         )}
       </Transition>

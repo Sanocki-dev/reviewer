@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 
-import SectionHeader from "@/components/SectionHeader";
-import ScrollBox from "@/components/ScrollBox";
-import MovieGridView from "@/components/MovieGridView";
-import { loader } from "@/pages/HomePage/HomePage";
+import SectionHeader from "@/components/ui/SectionHeader";
+import { loader } from "@/pages/HomePage";
+import MovieRow from "./MovieRow";
+import TwoSidedButton from "./TwoSidedButton";
 
-function TrendingSection() {
+function TrendingSection({ title }) {
   const [filter, setFilter] = useState();
   const [trending, setTrending] = useState();
   const results = useLoaderData();
@@ -26,14 +26,21 @@ function TrendingSection() {
   }, [filter]);
 
   const updateFilterHandler = (value) => {
-    setFilter(value);
+    setFilter(value.toLowerCase());
   };
 
   return (
     <>
       <Box display="flex" alignItems={"flex-end"}>
-        <SectionHeader title="Trending" />
-        <Box
+        <SectionHeader title={title} />
+        <TwoSidedButton
+          options={[
+            { value: "Week", disabled: filter === "week" },
+            { value: "Today", disabled: filter === "today" },
+          ]}
+          action={updateFilterHandler}
+        />
+        {/* <Box
           ml={3}
           sx={{
             overflow: "hidden",
@@ -61,19 +68,9 @@ function TrendingSection() {
           >
             Week
           </Button>
-        </Box>
+        </Box> */}
       </Box>
-      <ScrollBox
-        horizontal
-        gap={1}
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          py: 2,
-        }}
-      >
-        <MovieGridView movies={trending} />
-      </ScrollBox>
+      <MovieRow data={trending} />
     </>
   );
 }

@@ -1,13 +1,13 @@
-import { Box } from "@mui/material";
+import ScrollBox from "@/components/ui/ScrollBox";
+import { WelcomeBanner, JoinBanner } from "@/features/banners";
+import { Showcase } from "@/features/showcase";
+import TrendingSection from "@/features/showcase/components/TrendingSection";
 
-import ScrollBox from "@/components/ScrollBox";
-import TrendingSection from "./TrendingSection";
-import ComingSoon from "./ComingSoon";
-import Popular from "./Popular";
-import Welcome from "./Welcome";
-import JoinNow from "./JoinNow";
+import { useLoaderData } from "react-router-dom";
 
 const HomePage = () => {
+  const { trending, upcoming, popular } = useLoaderData();
+
   return (
     <ScrollBox
       sx={{
@@ -16,15 +16,11 @@ const HomePage = () => {
         p: 3,
       }}
     >
-      <Welcome />
-      <Box mb={2} />
+      <WelcomeBanner />
       <TrendingSection />
-      <Box mb={2} />
-      <ComingSoon />
-      <Box mb={2} />
-      <Popular />
-      <Box mb={2} />
-      <JoinNow />
+      <Showcase title="Coming Soon" data={upcoming} />
+      <Showcase title="Popular" data={popular} />
+      <JoinBanner />
     </ScrollBox>
   );
 };

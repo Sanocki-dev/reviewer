@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useLoaderData } from "react-router-dom";
 
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "@/components/form/SearchBar";
 
 const Welcome = () => {
   const { upcoming } = useLoaderData();

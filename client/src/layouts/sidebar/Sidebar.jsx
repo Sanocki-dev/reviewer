@@ -1,11 +1,12 @@
 import { Box, IconButton, useMediaQuery } from "@mui/material";
 import { Logout, Menu } from "@mui/icons-material";
-
-import Navigation, { StyledMenu } from "./Navigation/Navigation";
-import Followers from "./Followers/Followers";
-import NavigationItem from "./Navigation/NavigationItem";
-import logo from "/assets/r8hub_logo_light.svg";
 import { useNavigate } from "react-router-dom";
+
+import Navigation, { StyledMenu } from "./components/Navigation/Navigation";
+import Followers from "./components/Followers/Followers";
+import NavigationItem from "./components/Navigation/NavigationItem";
+import logo from "@/assets/brand/r8hub_logo_light.svg";
+
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");

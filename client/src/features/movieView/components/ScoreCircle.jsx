@@ -1,5 +1,4 @@
-import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
-import React from "react";
+import { Box, Tooltip, CircularProgress, Typography } from "@mui/material";
 
 const ScoreCircle = ({ isPlaced, total, score, sx, size = 50 }) => {
   let green = 235;
@@ -32,11 +31,26 @@ const ScoreCircle = ({ isPlaced, total, score, sx, size = 50 }) => {
           size={size}
           title={score}
           sx={{
+            position: "absolute",
+
+            color: `rgb(${green -150},${red -150},0)`,
+          }}
+          value={100}
+        />
+        <CircularProgress
+          variant="determinate"
+          thickness={5}
+          size={size}
+          title={score}
+          sx={{
             color: `rgb(${green},${red},52)`,
           }}
           value={score * 10}
         />
-        <Tooltip title={score === 0 ? "Not yet rated!" : total + " total votes."}>
+
+        <Tooltip
+          title={score === 0 ? "Not yet rated!" : total + " total votes."}
+        >
           <Typography position={"absolute"} variant="caption2">
             {scoreText}
           </Typography>

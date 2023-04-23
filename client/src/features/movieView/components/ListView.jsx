@@ -7,7 +7,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-import { genres } from "./Genres";
+import { genres } from "@/data/Genres";
 import ScoreCircle from "./ScoreCircle";
 
 const MovieListView = ({ movies }) => {

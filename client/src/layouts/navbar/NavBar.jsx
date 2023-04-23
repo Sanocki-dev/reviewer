@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
-import SearchBar from "../../components/SearchBar";
-import SidebarControls from "../../components/SidebarControls";
+import SearchBar from "@/components/form/SearchBar";
+import SidebarControls from "./components/SidebarControls";
 // import ProfileActions from "./ProfileActions";
 
 const NavBar = () => {

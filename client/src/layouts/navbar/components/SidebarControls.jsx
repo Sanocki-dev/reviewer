@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Menu } from "@mui/icons-material";
 import { Box, IconButton, useMediaQuery } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleSidebar } from "@/store";
+import { toggleSidebar } from "@/context";
 
 const SidebarControls = () => {
   const isSidebarOpen = useSelector((state) => state.isSidebarOpen);
