@@ -7,19 +7,15 @@ import Followers from "./components/Followers/Followers";
 import NavigationItem from "./components/Navigation/NavigationItem";
 import logo from "@/assets/brand/r8hub_logo_light.svg";
 
-
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
+  const addPadding = useMediaQuery("(max-width:400px)");
   const navigate = useNavigate();
   const showFollowers = followerShowingQuery && isOpen;
+  console.log(addPadding);
 
   return (
-    <Box
-      height="100%"
-      position={"relative"}
-      borderRight="1px solid"
-      borderColor="neutral.light"
-    >
+    <>
       <Box
         sx={{
           height: "6rem",
@@ -68,7 +64,7 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
           showText={isOpen}
         />
       </StyledMenu>
-    </Box>
+    </>
   );
 };
 

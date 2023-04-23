@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 
@@ -29,15 +29,21 @@ const router = createBrowserRouter([
 
 function App() {
   const mode = useSelector((state) => state.mode);
-  const theme = useMemo(() => createTheme(themeSettings('dark')), [mode]); // Updates the theme and makes sure only to rerender when mode changes
+  const theme = useMemo(() => createTheme(themeSettings("dark")), [mode]); // Updates the theme and makes sure only to rerender when mode changes
 
   return (
-    <div className="App">
+    <Box
+      className="App"
+      display="flex"
+      height="100vh"
+      bgcolor={"background.alt"}
+      overflow="hidden"
+    >
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <RouterProvider router={router} />
       </ThemeProvider>
-    </div>
+    </Box>
   );
 }
 

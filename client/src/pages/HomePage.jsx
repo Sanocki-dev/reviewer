@@ -2,14 +2,17 @@ import ScrollBox from "@/components/ui/ScrollBox";
 import { WelcomeBanner, JoinBanner } from "@/features/banners";
 import { Showcase } from "@/features/showcase";
 import TrendingSection from "@/features/showcase/components/TrendingSection";
+import { Box } from "@mui/material";
 
 import { useLoaderData } from "react-router-dom";
 
 const HomePage = () => {
-  const { trending, upcoming, popular } = useLoaderData();
+  const { upcoming, popular } = useLoaderData();
 
   return (
+    
     <ScrollBox
+      component="main"  
       sx={{
         height: "100%",
         maxHeight: "calc(100% - 6rem)",

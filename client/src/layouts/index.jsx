@@ -16,13 +16,9 @@ const Layout = () => {
   const sidebarHandler = () => dispatch(toggleSidebar());
 
   return (
-    <Box
-      display="flex"
-      height="100vh"
-      bgcolor={"background.alt"}
-      overflow="hidden"
-    >
+    <>
       <Box
+        className="Sidebar"
         sx={{
           width:
             isSidebarOpen && smQuery
@@ -33,11 +29,14 @@ const Layout = () => {
               ? 0
               : 100,
           bgcolor: "background.alt",
-          height: "100%",
+          height: 1,
           zIndex: 100,
-          transition: "all 1s ease-in-out",
-          position: smQuery && "absolute",
           overflow: "hidden",
+          borderRight: "1px solid",
+          pb:10,
+          borderColor: "neutral.light",
+          transition: "all 1s ease-in-out",
+          position: smQuery ? "absolute" : "relative",
         }}
       >
         <SideBar
@@ -80,7 +79,7 @@ const Layout = () => {
         <NavBar />
         <Outlet />
       </Box>
-    </Box>
+    </>
   );
 };
 
