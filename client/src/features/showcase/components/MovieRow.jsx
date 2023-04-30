@@ -12,7 +12,10 @@ const MovieRow = ({ data }) => {
         mb: 2,
       }}
     >
-      <GridView movies={data} />
+      {data.map((movie) => {
+        console.log("movie");
+        return <GridView movie={movie} />;
+      })}
     </ScrollBox>
   );
 };

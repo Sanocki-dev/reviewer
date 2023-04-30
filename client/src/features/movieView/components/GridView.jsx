@@ -1,27 +1,27 @@
-import { Box, useMediaQuery } from "@mui/material";
-import React from "react";
+import { Box, Modal, useMediaQuery } from "@mui/material";
+
 import ScoreCircle from "./ScoreCircle";
+import MovieImage from "./MovieImage";
+import { DetailedView } from "..";
+import { useState } from "react";
 
-const MovieGridView = ({ movies, state = "entered" }) => {
-  const imageURL = "https://image.tmdb.org/t/p/w500/";
+const MovieGridView = ({ movie }) => {
+  const { id, poster_path, title, vote_average, vote_count } = movie;
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const noImageURL =
-    "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
+  const [isOpen, setIsOpen] = useState(false);
 
-  return movies?.map(({ id, poster_path, title, vote_average, vote_count }) => {
-    if (!poster_path) return;
-
-    return (
+  return (
+    <>
       <Box
         key={id}
         display="flex"
         flexDirection="column"
         position={"relative"}
         sx={{
-          opacity: state === "entered" ? 1 : 0,
-          top: state === "entered" ? 0 : 1000,
           transition: "all 1s ease-in-out",
+          cursor: "pointer",
         }}
+        onClick={() => setIsOpen(true)}
       >
         <Box
           component={"section"}
@@ -34,10 +34,9 @@ const MovieGridView = ({ movies, state = "entered" }) => {
             mt: 2,
           }}
         >
-          <Box
-            component={"img"}
-            src={poster_path ? imageURL + poster_path : noImageURL}
-            alt={`${title}-backdrop`}
+          <MovieImage
+            title={title}
+            image={poster_path}
             sx={{
               height: 1,
               width: 1,
@@ -47,13 +46,22 @@ const MovieGridView = ({ movies, state = "entered" }) => {
         </Box>
 
         <ScoreCircle
-          sx={{ top: 0, right: -20 }}
+          sx={{ top: 20, right: 5 }}
           total={vote_count}
           score={vote_average}
         />
       </Box>
-    );
-  });
+      <Modal
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <Box width={"80%"}>
+          <DetailedView movie={{ id }} />
+        </Box>
+      </Modal>
+    </>
+  );
 };
 
 export default MovieGridView;

@@ -1,17 +1,20 @@
 import { Outlet } from "react-router-dom";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 
 import NavBar from "./navbar/NavBar";
 import SideBar from "./sidebar/Sidebar";
+import Footer from "./components/Footer";
+
 import { toggleSidebar } from "@/context";
+import ScrollBox from "@/components/ui/ScrollBox";
 
 const Layout = () => {
   const isSidebarOpen = useSelector((state) => state.isSidebarOpen);
   const dispatch = useDispatch();
-  const theme = useTheme();
-  const smQuery = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const smQuery = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const sidebarHandler = () => dispatch(toggleSidebar());
 
@@ -29,11 +32,11 @@ const Layout = () => {
               ? 0
               : 100,
           bgcolor: "background.alt",
-          height: 1,
+          height: smQuery ? "100vh" : "100%",
           zIndex: 100,
           overflow: "hidden",
           borderRight: "1px solid",
-          pb:10,
+          pb: 10,
           borderColor: "neutral.light",
           transition: "all 1s ease-in-out",
           position: smQuery ? "absolute" : "relative",
@@ -77,7 +80,17 @@ const Layout = () => {
         }}
       >
         <NavBar />
-        <Outlet />
+        <ScrollBox
+          sx={{
+            height: "100%",
+            maxHeight: "calc(100% - 6rem)",
+          }}
+        >
+          <Box component="main" px={3} pb={3}>
+            <Outlet />
+          </Box>
+          <Footer />
+        </ScrollBox>
       </Box>
     </>
   );

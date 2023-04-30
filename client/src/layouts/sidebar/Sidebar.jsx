@@ -12,7 +12,6 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
   const addPadding = useMediaQuery("(max-width:400px)");
   const navigate = useNavigate();
   const showFollowers = followerShowingQuery && isOpen;
-  console.log(addPadding);
 
   return (
     <>

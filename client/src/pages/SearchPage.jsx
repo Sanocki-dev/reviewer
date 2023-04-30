@@ -4,7 +4,7 @@ import { Transition } from "react-transition-group";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 
 import ScrollBox from "@/components/ui/ScrollBox";
-import { GridView, ListView, ViewChanger } from "@/features/movieView";
+import { GridView, DetailedView, ViewChanger } from "@/features/movieView";
 
 const SearchPage = () => {
   const [isGridView, setIsGridView] = useState(false);
@@ -12,12 +12,18 @@ const SearchPage = () => {
   const { results, page, total_pages } = useLoaderData();
 
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isLarge = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   const onPaginateHandler = (_, value) => {
     setSearchParams({ query: searchParams.get("query"), page: value });
   };
 
   const onViewHandler = () => {
+    setSearchParams({
+      display: "grid",
+      query: searchParams.get("query"),
+      page: searchParams.get("page"),
+    });
     setIsGridView((state) => !state);
   };
 
@@ -42,7 +48,9 @@ const SearchPage = () => {
                 transition: "opacity 1s ease-in-out",
               }}
             >
-              <GridView movies={results} />
+              {results?.map((data) => (
+                <GridView movie={data} />
+              ))}
             </Box>
           )}
         </Transition>
@@ -52,13 +60,16 @@ const SearchPage = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 1,
+                gap: 2,
                 mx: isMobile ? 0 : 3,
                 opacity: state === "entered" ? 1 : 0,
                 transition: "opacity 1s ease-in-out",
+                px: isMobile ? 0 : isLarge ? "10%" : "2%",
               }}
             >
-              <ListView movies={results} />
+              {results?.map((data) => (
+                <DetailedView key={data.id} movie={data} />
+              ))}
             </Box>
           )}
         </Transition>

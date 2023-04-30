@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   isSidebarOpen: false,
+  area: "CA"
 };
 
 export const authSlice = createSlice({
