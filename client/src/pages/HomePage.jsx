@@ -11,7 +11,7 @@ const HomePage = () => {
     <>
       <WelcomeBanner />
       <Trending />
-      <Showcase title="Coming Soosn" data={upcoming} />
+      <Showcase title="Coming Soon" data={upcoming} />
       <JoinBanner />
       <Showcase title="Popular" data={popular} />
     </>

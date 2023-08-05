@@ -53,7 +53,7 @@ const Details = ({ data, isMobile }) => {
         </Typography>
       </Stack>
 
-      <Box display='flex' gap={2} my={1}>
+      <Box display='flex' flexWrap={"wrap"} gap={2} my={1}>
         {genre_ids?.map(({ id }) => (
           <Chip
             key={id + "-title"}

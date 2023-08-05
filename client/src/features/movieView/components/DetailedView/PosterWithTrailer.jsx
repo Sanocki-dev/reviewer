@@ -13,7 +13,7 @@ const PosterWithTrailer = ({ details }) => {
         <MovieImage
           title={details.title}
           image={details.poster_path}
-          sx={{ borderRadius: 2 }}
+          sx={{ borderRadius: 2, mb:details.trailerURL ? 0 : 4 }}
         />
         {details.trailerURL && (
           <Button
