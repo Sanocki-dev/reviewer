@@ -15,7 +15,6 @@ import movieRouter from "../src/routes/movies.js";
 import watchListRouter from "../src/routes/watchLists.js";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 app.use(json());
 app.use(cors());
@@ -26,6 +25,13 @@ app.use("/", reviewRouter);
 app.use("/", movieRouter);
 app.use("/", watchListRouter);
 
+const router = express.Router();
+
+router.get("/de", (req, res) => {
+  res.json({
+    hello: "hi!",
+  });
+});
+
+app.use("/", router);
 export const handler = serverless(app);
-
-
