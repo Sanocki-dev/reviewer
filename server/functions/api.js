@@ -20,15 +20,11 @@ const PORT = process.env.PORT || 3001;
 app.use(json());
 app.use(cors());
 
-// app.use("/.netlify/functions/api", authRouter);
-// app.use("/.netlify/functions/api", userRouter);
-// app.use("/.netlify/functions/api", reviewRouter);
-// app.use("/.netlify/functions/api", movieRouter);
-// app.use("/.netlify/functions/api", watchListRouter);
-
-// app.get("/", (req, res) => {
-//   res.json({ success: true, message: "Deployment" });
-// });
+app.use("/", authRouter);
+app.use("/", userRouter);
+app.use("/", reviewRouter);
+app.use("/", movieRouter);
+app.use("/", watchListRouter);
 
 // app.listen(PORT, () => {
 //   console.log("Server running on PORT: " + PORT);
@@ -36,12 +32,18 @@ app.use(cors());
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/as", (req, res) => {
   res.json({
     hello: "hi!",
   });
 });
 
+router.get("/de", (req, res) => {
+  res.json({
+    Fucker: "hi!",
+  });
+});
+
 app.use("/", router);
 
-export const handler = async () => serverless(app);
+export const handler = serverless(app);
