@@ -26,24 +26,8 @@ app.use("/", reviewRouter);
 app.use("/", movieRouter);
 app.use("/", watchListRouter);
 
-// app.listen(PORT, () => {
-//   console.log("Server running on PORT: " + PORT);
-// });
-
-const router = express.Router();
-
-router.get("/as", (req, res) => {
-  res.json({
-    hello: "hi!",
-  });
+app.listen(PORT, () => {
+  console.log("Server running on PORT: " + PORT);
 });
-
-router.get("/de", (req, res) => {
-  res.json({
-    Fucker: "hi!",
-  });
-});
-
-app.use("/", router);
 
 export const handler = serverless(app);
