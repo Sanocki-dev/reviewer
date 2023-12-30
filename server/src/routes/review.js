@@ -10,8 +10,8 @@ import {
 
 const reviewRouter = Router();
 
-reviewRouter.post("/review", verifyToken, createReview);
 reviewRouter.get("/review", readReviews);
+reviewRouter.post("/review", verifyToken, createReview);
 reviewRouter.patch("/review/:id", verifyToken, updateReview);
 reviewRouter.patch("/review/:id/:userId", verifyToken, appraiseReview);
 reviewRouter.delete("/review/:id", verifyToken, deleteReview);

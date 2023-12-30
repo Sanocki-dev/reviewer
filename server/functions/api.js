@@ -26,8 +26,6 @@ app.use("/", reviewRouter);
 app.use("/", movieRouter);
 app.use("/", watchListRouter);
 
-app.listen(PORT, () => {
-  console.log("Server running on PORT: " + PORT);
-});
-
 export const handler = serverless(app);
+
+

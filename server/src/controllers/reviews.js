@@ -30,7 +30,7 @@ export const createReview = async (req, res) => {
 // READ ALL //
 export const readReviews = async (req, res) => {
   const reviews = await Review.find().sort({ medals: -1 });
-
+  if (!reviews) res.status(404).json({ error: "No reviews yet" });
   res.status(200).json(reviews);
 };
 
