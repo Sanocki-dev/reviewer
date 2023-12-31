@@ -1,5 +1,7 @@
+[functions]
+    node_bundler = "esbuild"
 [build]
-    functions = "functions"
+    functions = "src"
 [dev]
     publish = "dist"
 [[redirects]]

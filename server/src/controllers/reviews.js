@@ -1,6 +1,14 @@
 import { userNotifications } from "../helper/index.js";
 import Review from "../models/Review.js";
 
+// READ ALL //
+export const readReviews = async (req, res) => {
+  // const reviews = await Review.find().sort({ medals: -1 });
+  res.status(204).json("reviews");
+  // if (!reviews) res.status(404).json({ error: "No reviews yet" });
+  // res.status(200).json(reviews);
+};
+
 // CREATE //
 export const createReview = async (req, res) => {
   const { userId, movieId } = req.body;
@@ -25,13 +33,6 @@ export const createReview = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-};
-
-// READ ALL //
-export const readReviews = async (req, res) => {
-  const reviews = await Review.find().sort({ medals: -1 });
-  if (!reviews) res.status(404).json({ error: "No reviews yet" });
-  res.status(200).json(reviews);
 };
 
 // APPRAISE REVIEW //
