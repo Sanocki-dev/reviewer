@@ -37,6 +37,7 @@ const Welcome = () => {
           zIndex: 1,
           width: 1,
           height: 1,
+          color:'white'
         }}
       >
         <Typography variant="h1">Welcome to R8Hub!</Typography>
