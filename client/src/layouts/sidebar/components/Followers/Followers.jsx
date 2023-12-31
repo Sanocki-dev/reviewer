@@ -10,12 +10,14 @@ import {
 import { useState } from "react";
 import { Transition } from "react-transition-group";
 
-import { People } from "@/data/mockData";
 import FollowerItem from "./FollowerItem";
+import { useSelector } from "react-redux";
 
 const Followers = ({ showFollowList }) => {
   const [showAll, setShowAll] = useState(false);
-  const people = showAll ? People : People.slice(0, 5);
+  const friends = useSelector((state) => state.user.friends);
+
+  const people = showAll ? friends : friends.slice(0, 5);
 
   return (
     <Transition in={showFollowList} timeout={600} unmountOnExit mountOnEnter>
@@ -33,19 +35,19 @@ const Followers = ({ showFollowList }) => {
               transition: "all .8s ease-in-out",
             }}
           >
-            Following
+            Following - {friends.length} people
           </Typography>
           <StlyedList state={showList}>
-            {people.slice(0, 8).map(({ id, first_name, avatar }) => (
+            {people.slice(0, 8).map(({ id, userName, picturepath }) => (
               <FollowerItem
                 key={id}
                 id={id}
-                name={first_name}
-                avatar={avatar}
+                name={userName}
+                avatar={picturepath}
               />
             ))}
 
-            {People.length > 5 && (
+            {friends.length > 5 && (
               <MenuItem
                 sx={{ mt: 3 }}
                 onClick={() => setShowAll((state) => !state)}
@@ -61,7 +63,7 @@ const Followers = ({ showFollowList }) => {
                     span: { fontWeight: "500" },
                   }}
                 >
-                  {showAll ? "Show Less" : `Show ${People.length - 10} More`}
+                  {showAll ? "Show Less" : `Show ${friends.length - 10} More`}
                 </ListItemText>
               </MenuItem>
             )}

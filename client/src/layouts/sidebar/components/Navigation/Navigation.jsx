@@ -10,31 +10,34 @@ import { Transition } from "react-transition-group";
 
 import NavigationItem from "./NavigationItem";
 
-const Navigation = ({ isOpen, showFollowsIcon }) => {
-  
+const Navigation = ({ isOpen, showFollowsIcon, isAuth }) => {
   return (
     <>
       <StyledMenu isOpen={isOpen}>
         <NavigationItem
           to={"/"}
+          isAuth={isAuth}
           text="Browse"
           icon={<Explore />}
           showText={isOpen}
         />
         <NavigationItem
           to={"/favorites"}
+          isAuth={isAuth}
           text="Favorites"
           icon={<FavoriteBorder />}
           showText={isOpen}
         />
         <NavigationItem
           to={"/watchlist"}
+          isAuth={isAuth}
           text="Watchlist"
           icon={<WatchLater />}
           showText={isOpen}
         />
         <NavigationItem
           to={"/comingsoon"}
+          isAuth={isAuth}
           text="Coming Soon"
           icon={<CalendarMonth />}
           showText={isOpen}

@@ -45,19 +45,21 @@ const MovieGridView = ({ movie }) => {
           />
         </Box>
 
-        <ScoreCircle
-          sx={{ top: 20, right: 5 }}
-          total={vote_count}
-          score={vote_average}
-        />
+        {vote_count > 0 && (
+          <ScoreCircle
+            sx={{ top: 20, right: 5 }}
+            total={vote_count}
+            score={vote_average}
+          />
+        )}
       </Box>
       <Modal
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
         open={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <Box width={"80%"}>
-          <DetailedView movie={{ id }} />
+        <Box width={"50%"}>
+          <DetailedView id={id} />
         </Box>
       </Modal>
     </>

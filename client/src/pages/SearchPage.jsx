@@ -5,6 +5,7 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 
 import ScrollBox from "@/components/ui/ScrollBox";
 import { GridView, DetailedView, ViewChanger } from "@/features/movieView";
+import axios from "axios";
 
 const SearchPage = () => {
   const [isGridView, setIsGridView] = useState(false);
@@ -102,20 +103,16 @@ const SearchPage = () => {
 
 export default SearchPage;
 
-export const loader = async ({ request, params }) => {
+export const loader = async ({ request }) => {
   const { search } = new URL(request.url);
-  const { VITE_API_KEY } = import.meta.env;
 
-  const url =
-    "https://api.themoviedb.org/3/search/movie" +
-    search +
-    "&api_key=" +
-    VITE_API_KEY;
-
-  const response = await fetch(url, {
-    method: "GET",
-  });
-
-  const searchResults = await response.json();
-  return searchResults;
+  try {
+    const {data} = await axios.get(
+      `${import.meta.env.VITE_SITE_URL}/search${search.replace("query", "search")}`
+    );
+    
+    return data;
+  } catch (error) {
+    return { error: error };
+  }
 };

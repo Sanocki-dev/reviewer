@@ -1,17 +1,20 @@
 import { Box, IconButton, useMediaQuery } from "@mui/material";
-import { Logout, Menu } from "@mui/icons-material";
+import { Login, Logout, Menu } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Navigation, { StyledMenu } from "./components/Navigation/Navigation";
 import Followers from "./components/Followers/Followers";
 import NavigationItem from "./components/Navigation/NavigationItem";
-import logo from "@/assets/brand/r8hub_logo_light.svg";
+import logo from "@/assets/brand/r8_blue_new.svg";
+import { toggleIsAuthenticating, triggerLogout } from "@/context";
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
-  const addPadding = useMediaQuery("(max-width:400px)");
+  const isAuth = useSelector((state) => state.isAuth);
   const navigate = useNavigate();
   const showFollowers = followerShowingQuery && isOpen;
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -34,7 +37,7 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
             "&:hover": { cursor: "pointer" },
             alignContent: "center",
             width: 70,
-            height: 50,
+            height: 40,
           }}
           onClick={() => navigate("/home")}
         />
@@ -45,8 +48,12 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
         )}
       </Box>
 
-      <Navigation showFollowsIcon={showFollowers} isOpen={isOpen} />
-      <Followers showFollowList={showFollowers} />
+      <Navigation
+        isAuth={isAuth}
+        showFollowsIcon={showFollowers}
+        isOpen={isOpen}
+      />
+      {isAuth && <Followers showFollowList={showFollowers} />}
 
       <StyledMenu
         sx={{
@@ -56,12 +63,22 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
           width: "100%",
         }}
       >
-        <NavigationItem
-          to="/logout"
-          text={"Log out"}
-          icon={<Logout />}
-          showText={isOpen}
-        />
+        {isAuth ? (
+          <NavigationItem
+            onClick={() => dispatch(triggerLogout())}
+            text={"Logout"}
+            icon={<Logout />}
+            isAuth={true}
+            showText={isOpen}
+          />
+        ) : (
+          <NavigationItem
+            text={"Login"}
+            onClick={() => dispatch(toggleIsAuthenticating())}
+            icon={<Login />}
+            showText={isOpen}
+          />
+        )}
       </StyledMenu>
     </>
   );

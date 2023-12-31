@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+& :-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 0 !important;
+}
+
 :root {
   font-family: Roboto, sans-serif;
   line-height: 1.5;

@@ -58,7 +58,7 @@ const SearchBar = ({ filled, placeholder, fullWidth }) => {
           sx={{ width: "90%" }}
           label="search"
           value={params}
-          id="search_movies"
+          className="search_movies"
           placeholder={placeholder || "Search Movies"}
           onChange={(e) => setParams(e.target.value)}
         />

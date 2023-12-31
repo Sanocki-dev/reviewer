@@ -13,7 +13,7 @@ const MovieRow = ({ data }) => {
       }}
     >
       {data?.map((movie) => (
-        <GridView movie={movie} />
+        <GridView key={movie.id} movie={movie} />
       ))}
     </ScrollBox>
   );

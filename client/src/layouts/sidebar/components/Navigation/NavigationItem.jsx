@@ -10,7 +10,15 @@ import { useNavigate } from "react-router-dom";
 
 import { toggleSidebar } from "@/context";
 
-const NavigationItem = ({ text, icon, to, showText, sx }) => {
+const NavigationItem = ({
+  text,
+  icon,
+  to,
+  showText,
+  sx,
+  isAuth,
+  onClick = null,
+}) => {
   const selected = window.location.pathname.toLowerCase();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,12 +26,21 @@ const NavigationItem = ({ text, icon, to, showText, sx }) => {
 
   const onClickHandler = () => {
     if (smQuery) dispatch(toggleSidebar());
-    navigate(to);
+    if (Boolean(to)) navigate(to);
+    if (Boolean(onClick)) onClick();
   };
+
+  const activeItem =
+    isAuth || text == "Login" || text == "Logout" || text == "Browse";
 
   return (
     <Tooltip disableHoverListener={showText} title={text} placement="right">
-      <MenuItem selected={selected === to} onClick={onClickHandler} sx={sx}>
+      <MenuItem
+        disabled={!activeItem}
+        selected={selected === to}
+        onClick={onClickHandler}
+        sx={sx}
+      >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           sx={{
