@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
 import Layout from "@/layouts";
@@ -37,9 +37,8 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const dispatch = useDispatch();
   const mode = useSelector((state) => state.mode);
-  const theme = useMemo(() => createTheme(themeSettings("dark")), [mode]); // Updates the theme and makes sure only to rerender when mode changes
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); // Updates the theme and makes sure only to rerender when mode changes
   const { VITE_GOOGLE_CLIENT_ID } = import.meta.env;
 
   const cookies = new Cookies(null, { path: "/" });

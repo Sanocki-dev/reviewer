@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 
 import SearchBar from "@/components/form/SearchBar";
 import SidebarControls from "./components/SidebarControls";
-// import ProfileActions from "./ProfileActions";
+import ProfileActions from "./components/ProfileActions";
 
 const NavBar = () => {
   return (
@@ -24,7 +24,7 @@ const NavBar = () => {
         justifyContent={"space-between"}
       >
         <SearchBar />
-        {/* <ProfileActions /> */}
+        <ProfileActions />
       </Box>
     </Box>
   );

@@ -1,4 +1,8 @@
-import { MessageOutlined, NotificationsOutlined } from "@mui/icons-material";
+import {
+  DarkMode,
+  LightMode,
+  NotificationsOutlined,
+} from "@mui/icons-material";
 import {
   Avatar,
   Badge,
@@ -7,24 +11,32 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
+
+import { setMode } from "@/context";
 
 const ProfileActions = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const mode = useSelector((state) => state.mode);
   const mdQuery = useMediaQuery(theme.breakpoints.down("md"));
 
-  const showIcons = (state) => (
-    <IconButtonNotifications state={state} notification={false}>
-      <NotificationsOutlined />
-    </IconButtonNotifications>
-  );
+  // const showIcons = (state) => (
+  //   <IconButtonNotifications state={state} notification={false}>
+  //     <NotificationsOutlined />
+  //   </IconButtonNotifications>
+  // );
 
   return (
     <Box display="flex" mr={5} justifyContent={"space-between"} gap={3}>
-      <Transition in={!mdQuery} timeout={300} unmountOnExit mountOnEnter>
+      {/* <Transition in={!mdQuery} timeout={300} unmountOnExit mountOnEnter>
         {(state) => showIcons(state)}
-      </Transition>
+      </Transition> */}
 
+      <IconButton onClick={() => dispatch(setMode())}>
+        {mode !== "dark" ? <DarkMode /> : <LightMode />}
+      </IconButton>
       <StyledBox color={theme}>
         <Avatar
           sx={{ border: "4px solid", borderColor: "neutral.light" }}

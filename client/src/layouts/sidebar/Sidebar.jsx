@@ -6,15 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Navigation, { StyledMenu } from "./components/Navigation/Navigation";
 import Followers from "./components/Followers/Followers";
 import NavigationItem from "./components/Navigation/NavigationItem";
-import logo from "@/assets/brand/r8_blue_new.svg";
+import lightLogo from "@/assets/brand/r8_blue_new.svg";
+import darkLogo from "@/assets/brand/r8_new_dark.svg";
+
 import { toggleIsAuthenticating, triggerLogout } from "@/context";
 
 const SideBar = ({ isOpen, onClick, isMobile }) => {
   const followerShowingQuery = useMediaQuery("(min-height:720px)");
-  const isAuth = useSelector((state) => state.isAuth);
+  const { isAuth, mode } = useSelector((state) => state);
   const navigate = useNavigate();
-  const showFollowers = followerShowingQuery && isOpen;
   const dispatch = useDispatch();
+  const showFollowers = followerShowingQuery && isOpen;
 
   return (
     <>
@@ -30,7 +32,7 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
         }}
       >
         <Box
-          src={logo}
+          src={mode !== "light" ? lightLogo : darkLogo}
           alt="R8Logo"
           component={"img"}
           sx={{
@@ -38,6 +40,9 @@ const SideBar = ({ isOpen, onClick, isMobile }) => {
             alignContent: "center",
             width: 70,
             height: 40,
+            "& R8-R": {
+              fill:'red'
+            },
           }}
           onClick={() => navigate("/home")}
         />
