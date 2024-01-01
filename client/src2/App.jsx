@@ -9,7 +9,7 @@ import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
-import Layout from "@/layouts";
+import RootLayout from "@/templates";
 import { themeSettings } from "@/theme";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -21,7 +21,7 @@ import BrowsePage, { loader as BrowseLoader } from "@/pages/BrowsePage";
 import AuthPage from "@/pages/AuthPage";
 import FavoritesPage from "@/pages/FavoritesPage";
 import MoviePage, { loader as MovieLoader } from "@/pages/MoviePage";
-import { tokenLoader, checkAuthLoader } from "@/utils/auth";
+import { checkAuthLoader } from "@/utils/auth";
 
 const router = createBrowserRouter([
   {

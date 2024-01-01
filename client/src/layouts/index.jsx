@@ -10,7 +10,7 @@ import Footer from "./components/Footer";
 import { toggleSidebar } from "@/context";
 import ScrollBox from "@/components/ui/ScrollBox";
 
-const Layout = () => {
+const RootLayout = () => {
   const isSidebarOpen = useSelector((state) => state.isSidebarOpen);
   const dispatch = useDispatch();
 
@@ -96,4 +96,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default RootLayout;
