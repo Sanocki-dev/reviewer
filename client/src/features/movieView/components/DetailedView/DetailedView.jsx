@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
 
 import Details from "./Details";
 import MovieImage from "../MovieImage";
@@ -9,12 +9,14 @@ import axios from "axios";
 
 const DetailedView = ({ movie, id }) => {
   const [data, setData] = useState(movie);
-  const isMobile = true
+  const isMobile = true;
 
   useEffect(() => {
     const getDetails = async () => {
       try {
-        let { data } = await axios.get(`${import.meta.env.VITE_SITE_URL}/detail?id=${id}`);
+        let { data } = await axios.get(
+          `${import.meta.env.VITE_SITE_URL}/detail?id=${id}`
+        );
         setData(data);
       } catch (error) {
         console.log("error");

@@ -28,7 +28,7 @@ export const RegisterForm = {
     const { email, userName, password } = values;
     try {
       const res = await axios.post(
-        import.meta.env.VITE_SITE_URL + "/register",
+        import.meta.env.VITE_SITE_URL + "register",
         { email, userName, password },
         {
           headers: {

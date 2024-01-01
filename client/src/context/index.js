@@ -27,6 +27,9 @@ export const authSlice = createSlice({
     },
     // Log the user in
     setLogin: (state, action) => {
+      console.log(action)
+      console.log(cookies.get("token"))
+      
       state.user = action.payload;
       state.token = cookies.get("token");
       state.isAuth = true;
@@ -41,12 +44,7 @@ export const authSlice = createSlice({
       cookies.remove("user");
     },
     updateUser: (state, action) => {
-      if (action.payload.type == "favorites") {
-        state.user.favorites = action.payload.data;
-      }
-      if (action.payload.type == "seen") {
-        state.user.seen = action.payload.data;
-      }
+      state.user[action.payload.type] = action.payload.data
     },
     setFollowers: (state, action) => {
       // Checks if the user is logged in

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import r8logo from "@/assets/brand/r8hub_logo_light.svg";
+import r8logo from "@/assets/brand/r8_blue_new.svg";
 import Brand from "./Brand";
 
 const Footer = () => {

@@ -31,7 +31,7 @@ const NavigationItem = ({
   };
 
   const activeItem =
-    isAuth || text == "Login" || text == "Logout" || text == "Browse";
+    isAuth || text == "Login" || text == "Logout" || text == "Browse" || text=='Home';
 
   return (
     <Tooltip disableHoverListener={showText} title={text} placement="right">

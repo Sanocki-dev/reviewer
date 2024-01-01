@@ -15,17 +15,21 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import FormInput from "@/components/form/FormInput";
 import logo from "@/assets/brand/r8_golden.svg";
+import { tokenLoader } from "@/utils/auth";
 
 const MoviePage = () => {
   const data = useLoaderData();
-  const { user, token } = useSelector((state) => state);
+  const { user } = useSelector((state) => state);
+  const token = tokenLoader();
   const [isUpdating, setIsUpdating] = useState(false);
   const [details, setDetails] = useState(data);
   const imageURL = "https://image.tmdb.org/t/p/w500/" + data?.backdrop_path;
 
-  const hasReview = details.reviews?.find((el) => el.userId._id === user?.id);
+  const hasReview = details.reviews?.find((el) => el.userId?._id === user?.id);
 
   const onSubmitHandler = async (values) => {
+    if (!user) return;
+
     try {
       let res = undefined;
 
@@ -87,6 +91,8 @@ const MoviePage = () => {
   };
 
   const onAppraiseHandler = async (id, index) => {
+    if (!user) return;
+    
     try {
       let res = await axios.patch(
         `${import.meta.env.VITE_SITE_URL}review/${id}/${user?.id}`,
@@ -122,13 +128,13 @@ const MoviePage = () => {
           <Typography></Typography>
         </Box>
 
-        {Boolean(hasReview) && !isUpdating ? (
+        {!user ? null : Boolean(hasReview) && !isUpdating ? (
           <Box>
-            <Button onClick={() => onDeleteHandler(hasReview._id)}>
+            <Button onClick={() => onDeleteHandler(hasReview?._id)}>
               Delete
             </Button>
             <Button onClick={() => setIsUpdating(true)}>UPDATE</Button>
-            <Typography>{hasReview?.userId.userName}</Typography>
+            <Typography>{hasReview?.userId?.userName}</Typography>
             <Typography>
               {moment(hasReview?.timestamp).format("MMM DD/YY")}
             </Typography>
@@ -171,7 +177,7 @@ const MoviePage = () => {
         {details.reviews?.map(
           ({ _id, review, rating, timestamp, userId, medals }, index) => (
             <Box key={index} bgcolor={"background.alt"} width={"50%"}>
-              <Typography>{userId.userName}</Typography>
+              <Typography>{userId?.userName}</Typography>
               <Typography>{moment(timestamp).format("MMM DD/YY")}</Typography>
               <Typography>{review}</Typography>
               <Typography>{rating}%</Typography>
@@ -187,7 +193,7 @@ const MoviePage = () => {
                     sx={{
                       mr: 2,
                       filter:
-                        medals.findIndex((id) => id === user.id) === -1
+                        medals.findIndex((id) => id === user?.id) === -1
                           ? "grayscale(1) brightness(.5) opacity(.5)"
                           : "grayscale(0)",
                       transition: "all .6s ease-in-out",
@@ -210,7 +216,9 @@ export const loader = async ({ request }) => {
   const id = new URL(request.url).searchParams.get("id");
 
   try {
-    const response = await axios.get(`${import.meta.env.VITE_SITE_URL}/movie?id=${id}`);
+    const response = await axios.get(
+      `${import.meta.env.VITE_SITE_URL}/movie?id=${id}`
+    );
 
     if (response.status !== 200) {
       return { error: "Unable to load movie data." };

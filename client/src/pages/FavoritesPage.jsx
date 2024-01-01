@@ -5,9 +5,8 @@ import { Stack } from "@mui/material";
 import { DetailedView } from "@/features/movieView";
 
 const FavoritesPage = () => {
-  const favorites = useSelector((state) => state.user.favorites);
+  const favorites = useSelector((state) => state.user?.favorites);
 
-  console.log(favorites)
   return (
     <Stack gap={2} minHeight={700}>
       {favorites?.map((movie) => (

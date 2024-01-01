@@ -9,7 +9,11 @@ const HomePage = () => {
 
   return (
     <>
+      <WelcomeBanner />
+      <Trending />
+      <Showcase title="Coming Soon" data={upcoming} />
       <JoinBanner />
+      <Showcase title="Popular" data={popular} />
     </>
   );
 };

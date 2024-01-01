@@ -13,7 +13,7 @@ import { Form, Formik } from "formik";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Transition } from "react-transition-group";
 
-import logo from "@/assets/brand/R8BrandLight.svg";
+import logo from "@/assets/brand/r8_blue_new.svg";
 import { LoginForm, RegisterForm } from "./AuthForms";
 import { setLogin, toggleIsAuthenticating } from "@/context";
 import FormInput from "@/components/form/FormInput";
@@ -152,7 +152,7 @@ const AuthPage = () => {
           }}
         </Formik>
 
-        <Stack direction={"row"} alignItems={"center"} width={0.75}>
+        {/* <Stack direction={"row"} alignItems={"center"} width={0.75}>
           <Box flex={1} sx={{ height: "1px", bgcolor: "grey.500" }} />
           <Typography flexShrink={1} px={1} variant="caption">
             Or Register with
@@ -173,7 +173,7 @@ const AuthPage = () => {
           }}
         >
           Sign in with Google
-        </Button>
+        </Button> */}
 
         <Stack direction={"row"} alignItems={"baseline"} gap={0.5}>
           <Typography variant="body2" color="grey.500">

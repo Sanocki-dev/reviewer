@@ -1,8 +1,8 @@
 import {
   Bookmark,
-  CalendarMonth,
   Explore,
   FavoriteBorder,
+  Home,
   WatchLater,
 } from "@mui/icons-material";
 import { Box, MenuList } from "@mui/material";
@@ -16,6 +16,13 @@ const Navigation = ({ isOpen, showFollowsIcon, isAuth }) => {
       <StyledMenu isOpen={isOpen}>
         <NavigationItem
           to={"/"}
+          isAuth={isAuth}
+          text="Home"
+          icon={<Home />}
+          showText={isOpen}
+        />
+        <NavigationItem
+          to={"/browse"}
           isAuth={isAuth}
           text="Browse"
           icon={<Explore />}
@@ -35,14 +42,6 @@ const Navigation = ({ isOpen, showFollowsIcon, isAuth }) => {
           icon={<WatchLater />}
           showText={isOpen}
         />
-        <NavigationItem
-          to={"/comingsoon"}
-          isAuth={isAuth}
-          text="Coming Soon"
-          icon={<CalendarMonth />}
-          showText={isOpen}
-        />
-
         <Transition
           in={!showFollowsIcon}
           unmountOnExit

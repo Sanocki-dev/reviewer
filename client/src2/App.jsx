@@ -26,20 +26,20 @@ import { tokenLoader, checkAuthLoader } from "@/utils/auth";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
     id: "root",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
     loader: tokenLoader,
-    errorElement: { element: <HomePage />, loader: HomeLoader },
     children: [
-      { path: "/", element: <HomePage />, loader: HomeLoader },
-      { path: "/browse", element: <BrowsePage />, loader: BrowseLoader },
-      { path: "/search", element: <SearchPage />, loader: SearchLoader },
+      { index: true, element: <HomePage />, loader: HomeLoader },
+      { path: "browse", element: <BrowsePage />, loader: BrowseLoader },
+      { path: "search", element: <SearchPage />, loader: SearchLoader },
       {
-        path: "/favorites",
+        path: "favorites",
         element: <FavoritesPage />,
         loader: checkAuthLoader,
       },
-      { path: "/movie", element: <MoviePage />, loader: MovieLoader },
+      { path: "movie", element: <MoviePage />, loader: MovieLoader },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

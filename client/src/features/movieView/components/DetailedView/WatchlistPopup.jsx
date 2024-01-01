@@ -2,33 +2,45 @@ import { PlaylistAdd } from "@mui/icons-material";
 import { Divider, IconButton, InputBase, Menu, MenuItem } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form } from "react-router-dom";
+
+import { updateUser } from "@/context";
 
 const WatchlistPopup = ({ isOpen, handleClose, anchorEl, movie }) => {
   const [watchlistName, setWatchlistName] = useState();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const onClick = (e) => {
+  const onClickHandler = (e) => {
     if (e.target.id[0] === "w") handleClose();
     e.preventDefault();
   };
 
-  const onKeyDown = (e) => {
+  const onKeyDownHandler = (e) => {
     e.stopPropagation();
+  };
+
+  const onChangeHandler = (e) => {
     setWatchlistName(e.target.value);
   };
 
   const onCreateHandler = async () => {
-    let res = await axios.post(import.meta.env.VITE_SITE_URL + "watchList", {
-      userId: user.id,
-      name: watchlistName,
-      movieId: {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-      },
-    });
+    //import.meta.env.VITE_SITE_URL
+    //"http://localhost:8888/"
+    let { data } = await axios.post(
+      import.meta.env.VITE_SITE_URL + "watchList",
+      {
+        userId: user.id,
+        name: watchlistName,
+        movieId: {
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+        },
+      }
+    );
+    dispatch(updateUser({ type: "watchlists", data }));
   };
 
   return (
@@ -37,7 +49,7 @@ const WatchlistPopup = ({ isOpen, handleClose, anchorEl, movie }) => {
       id="watchlist-menu"
       open={isOpen}
       onClose={handleClose}
-      onClick={onClick}
+      onClick={onClickHandler}
       PaperProps={{
         elevation: 0,
         sx: {
@@ -67,18 +79,19 @@ const WatchlistPopup = ({ isOpen, handleClose, anchorEl, movie }) => {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem id="w-0">Horror</MenuItem>
-      <MenuItem id="w-1">Fantasy</MenuItem>
-      <MenuItem id="w-2">Comendy</MenuItem>
+      {user?.watchlists?.map(({ name }, index) => (
+        <MenuItem id={`w-${index}`}>{name}</MenuItem>
+      ))}
 
       <Divider />
       <MenuItem id="watchlist-name">
         <Form onSubmit={onCreateHandler}>
           <InputBase
-            sx={{ ml: 1, flex: 1 }}
             placeholder="New Watchlist"
             inputProps={{ "aria-label": "create new watchlist" }}
-            onKeyDown={onKeyDown}
+            onChange={onChangeHandler}
+            onKeyDown={onKeyDownHandler}
+            sx={{ ml: 1, flex: 1 }}
           />
         </Form>
         <IconButton type="submit" onClick={onCreateHandler}>

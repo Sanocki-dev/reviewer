@@ -12,7 +12,7 @@ import ActionBtn from "./ActionBtn";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "@/context";
-import WatchlistPopup from "@/pages/WatchlistPopup";
+import WatchlistPopup from "./WatchlistPopup";
 import { useState } from "react";
 
 const Actions = ({ data }) => {
@@ -27,6 +27,7 @@ const Actions = ({ data }) => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log('Watchlist')
   };
 
   const onClickHandler = async (type) => {
@@ -44,7 +45,7 @@ const Actions = ({ data }) => {
   let isSeen = user?.seen.find((item) => item.id === data?.id);
 
   return (
-    <Box display="flex" flexDirection={"column"} alignItems="center">
+    <Box display="flex" flexDirection={"column"} alignItems="center" >
       {/* <ScoreCircle score={data.vote_average} total={data.vote_count} isPlaced /> */}
       <ActionBtn
         tooltip="Add to watch list"
