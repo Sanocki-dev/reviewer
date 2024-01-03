@@ -9,12 +9,12 @@ import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
-import Layout from "@/layouts";
+import RootLayout from "@/new/Pages/Root";
 import { themeSettings } from "@/theme";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import HomePage, { loader as HomeLoader } from "@/pages/HomePage";
+import HomePage, { loader as HomeLoader } from "@/new/pages/Home";
 import SearchPage, { loader as SearchLoader } from "@/pages/SearchPage";
 import BrowsePage, { loader as BrowseLoader } from "@/pages/BrowsePage";
 
@@ -26,21 +26,21 @@ import { tokenLoader, checkAuthLoader } from "@/utils/auth";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <RootLayout />,
     id: "root",
     loader: tokenLoader,
-    errorElement: { element: <HomePage />, loader: HomeLoader },
+    // errorElement: { element: <HomePage />, loader: HomeLoader },
     children: [
       { path: "/", element: <HomePage />, loader: HomeLoader },
-      { path: "/browse", element: <BrowsePage />, loader: BrowseLoader },
-      { path: "/search", element: <SearchPage />, loader: SearchLoader },
-      {
-        path: "/favorites",
-        element: <FavoritesPage />,
-        loader: checkAuthLoader,
-      },
-      { path: "/movie", element: <MoviePage />, loader: MovieLoader },
-      { path: "*", element: <Navigate to="/" replace /> },
+      //   { path: "/browse", element: <BrowsePage />, loader: BrowseLoader },
+      //   { path: "/search", element: <SearchPage />, loader: SearchLoader },
+      //   {
+      //     path: "/favorites",
+      //     element: <FavoritesPage />,
+      //     loader: checkAuthLoader,
+      //   },
+      //   { path: "/movie", element: <MoviePage />, loader: MovieLoader },
+      //   { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
 ]);
@@ -53,9 +53,11 @@ function App() {
     <Box
       className="App"
       display="flex"
-      height="100vh"
-      bgcolor={"background.alt"}
-      overflow="hidden"
+      sx={{
+        overflowX: "hidden",
+        bgcolor: "Background.main",
+        minHeight: "100vh",
+      }}
     >
       <Formik>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
