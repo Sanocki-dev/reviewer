@@ -26,12 +26,9 @@ export const authSlice = createSlice({
       state.movie = action.payload;
     },
     // Log the user in
-    setLogin: (state, action) => {
-      console.log(action)
-      console.log(cookies.get("token"))
-      
+    setLogin: (state, action) => {    
       state.user = action.payload;
-      state.token = cookies.get("token");
+      state.token = localStorage.getItem("token");
       state.isAuth = true;
       state.isAuthenticating = false;
     },
@@ -40,8 +37,8 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuth = false;
-      cookies.remove("token");
-      cookies.remove("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     },
     updateUser: (state, action) => {
       state.user[action.payload.type] = action.payload.data
@@ -57,9 +54,6 @@ export const authSlice = createSlice({
     // Toggles the sidebar
     toggleSidebar: (state) => {
       state.isSidebarOpen = !state.isSidebarOpen;
-    },
-    toggleIsAuthenticating: (state) => {
-      state.isAuthenticating = !state.isAuthenticating;
     },
   },
 });

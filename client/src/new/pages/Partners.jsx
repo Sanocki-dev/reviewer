@@ -13,8 +13,9 @@ const Partners = () => {
     },
   ];
 
-  return branding.map(({ alt, path }) => (
+  return branding.map(({ alt, path }, index) => (
     <Box
+      key={index}
       component={"img"}
       src={path}
       alt={alt}

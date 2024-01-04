@@ -21,7 +21,7 @@ const ShowcaseLayout = ({ image, children }) => {
           background: "linear-gradient(0deg, #181818, transparent)",
           bgcolor: "primary.light",
           width: 1,
-          minHeight:700,
+          minHeight: 700,
           mt: "600px",
         }}
       >

@@ -9,9 +9,9 @@ const HomePage = () => {
 
   return (
     <ShowcaseLayout image={img}>
-      <Box height={400} bgcolor={'red'}/>
-      <Box height={400} bgcolor={'green'}/>
-      <Box height={400} bgcolor={'blue'}/>
+      <Box height={400} />
+      <Box height={400} />
+      <Box height={400} />
     </ShowcaseLayout>
   );
 };

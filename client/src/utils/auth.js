@@ -1,9 +1,7 @@
 import { redirect } from "react-router-dom";
-import Cookies from "universal-cookie";
 
 export function getAuthToken() {
-  const cookies = new Cookies(null, { path: "/" });
-  const token = cookies.get("token");
+  const token = localStorage.getItem("token");
   return token;
 }
 

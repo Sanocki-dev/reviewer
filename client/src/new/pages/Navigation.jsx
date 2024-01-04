@@ -25,6 +25,7 @@ const Navigation = () => {
       <MenuList sx={{ display: "flex", p: 0 }}>
         {links.map(({ id, name, url, isAuth }) => (
           <MenuItem
+            key={id}
             id={id}
             onClick={onRedirectHandler}
             selected={selected === url}

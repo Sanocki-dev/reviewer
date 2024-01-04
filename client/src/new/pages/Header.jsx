@@ -4,6 +4,7 @@ import Navigation from "./Navigation";
 import Search from "./Search";
 import ProfileActions from "./ProfileActions";
 import FlexRow from "./FlexRow";
+import Modal from "./Modal";
 
 const Header = () => {
   return (
@@ -44,7 +45,7 @@ const Inner = (props) => (
       borderRadius: 2,
       height: 1,
       width: "80%",
-      bgcolor: "primary.light",
+      bgcolor: "background.default",
     }}
   >
     {props.children}
