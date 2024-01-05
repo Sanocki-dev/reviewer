@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
 
 const WatchListSchema = new Schema({
   name: {
@@ -21,6 +22,8 @@ const WatchListSchema = new Schema({
     default: [],
   },
 });
+
+WatchListSchema.index({ name: 1, userId: 1 }, { unique: true });
 
 const WatchList = model("WatchList", WatchListSchema);
 

@@ -28,18 +28,6 @@ export const createWatchlist = async (req, res) => {
 
     if (!user) return;
 
-    const watchlist = await WatchList.find({
-      userId,
-      name,
-    });
-
-    if (watchlist) {
-      res
-        .status(400)
-        .json({ message: "Watchlist already exists with this name." });
-      return;
-    }
-
     const newList = new WatchList({
       name,
       genre,
@@ -53,7 +41,11 @@ export const createWatchlist = async (req, res) => {
     const list = await WatchList.find().sort({ createdAt: -1 });
     res.status(201).json(list);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    if (error.code === 11000) {
+      return res.status(406).send({name: "Watchlist with this name already exists"});
+    }
+    
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -77,9 +69,9 @@ export const updateWatchlist = async (req, res) => {
     } else {
       watchlist.movies.push(movie);
     }
-    
+
     await watchlist.save();
-    
+
     res.status(200).json(watchlist);
   } catch (error) {
     res.status(409).json({ message: error.message });

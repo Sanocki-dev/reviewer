@@ -22,7 +22,6 @@ export const Register = {
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
   }),
   onSubmit: async (values, { setFieldError, setStatus }) => {
-    console.log("code")
     const { code, data } = await getPost("/register", values, setFieldError);
 
     // If it was a valid request set the token in storage
