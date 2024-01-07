@@ -1,77 +1,112 @@
-import { useState } from "react";
-import { Box, Stack, Typography, Link, Button } from "@mui/material";
+import { useMemo } from "react";
+import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
+import { Button, Typography } from "@mui/material";
+import { Transition } from "react-transition-group";
 
-import Logo from "./Logo";
-import AuthFormik from "./AuthFormik";
-import Modal from "./Modal";
+import { setLogin } from "@/context";
+import FormInput from "@/components/form/FormInput";
+import { useNavigate } from "react-router-dom";
+import { LoginSchema, RegisterSchema, getPost } from "@/utils/formiks";
+import Success from "./Success";
 
-const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
+const AuthForm = ({ isLogin, handleClose }) => {
+  const dispatch = useDispatch();
 
-  const modeToggle = () => {
-    setIsLogin(!isLogin);
+  let formik = useMemo(
+    () => (isLogin ? RegisterSchema : LoginSchema),
+    [isLogin]
+  );
+
+  const onSubmitHandler = async (
+    values,
+    { setFieldError, setErrors, setStatus }
+  ) => {
+    const url = isLogin ? "/register" : "/login";
+
+    const { success, data } = await getPost(
+      url,
+      values,
+      setFieldError,
+      setErrors
+    );
+
+    // Check if it was a success
+    if (!success) return;
+    localStorage.setItem("token", data.token);
+    setStatus(200);
+
+    setTimeout(() => {
+      handleClose();
+    }, 1500);
+
+    setTimeout(() => {
+      dispatch(setLogin(data.user));
+    }, 2200);
   };
 
   return (
-    <>
-      <Button onClick={() => setOpenForm(true)}>Login</Button>
-      <Modal open={openForm} handleClose={() => setOpenForm(false)}>
-        <Container>
-          <Logo />
-          <Typography variant="h2">Welcome to R8Hub!</Typography>
-          <Typography
-            variant="body1"
-            textAlign={"center"}
-            color={"grey.400"}
-            height={50}
-            w={1}
-          >
-            {isLogin
-              ? "Register to join the growing movie lover community and start exploring and rating thousands of movies!"
-              : "Login and start creating and sharing your favorite movies and reviews!"}
-          </Typography>
+    <Formik {...formik} onSubmit={onSubmitHandler}>
+      {(form) => {
+        return (
+          <Form>
+            <Success start={form.status === 200}>
+              <Typography variant="h1">Success!</Typography>
+              <Typography color={"primary.main"}>Welcome back</Typography>
+            </Success>
 
-          <AuthFormik isLogin={isLogin} />
-
-          <Stack direction={"row"} alignItems={"baseline"} gap={0.5}>
-            <Typography variant="body2" color="grey.500">
-              {isLogin
-                ? "Already have an account?"
-                : "Dont have an account yet?"}
+            <Typography variant="subtitle2" color={"error"}>
+              {form.errors.server}
             </Typography>
-            <Link component={"button"} onClick={modeToggle} underline="none">
-              {isLogin ? "Login" : "Register"}
-            </Link>
-          </Stack>
-        </Container>
-      </Modal>
-    </>
+
+            <FormInput type="text" name="email" label="Email" />
+            <AnimatedInput animate={isLogin} name="userName" label="Username" />
+            <FormInput type="password" name="password" label="Password" />
+            <AnimatedInput
+              animate={isLogin}
+              type="password"
+              name="confirmPassword"
+              label="Confirm Password"
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              disabled={form.isSubmitting}
+              sx={{ borderRadius: 3, textTransform: "none" }}
+              variant="contained"
+            >
+              {isLogin ? "Register" : "Login"}
+            </Button>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
 export default AuthForm;
 
-const Container = (props) => (
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      bgcolor: "background.alt",
-      borderRadius: 2,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "space-evenly",
-      py: 5,
-      px: 6,
-      gap: 3,
-      width: 500,
-      boxShadow: 24,
-    }}
+const AnimatedInput = ({ animate, name, label, type = "text" }) => (
+  <Transition
+    timeout={{ enter: 200, exit: 1000 }}
+    in={animate}
+    unmountOnExit
+    mountOnEnter
   >
-    {props.children}
-  </Box>
+    {(mount) => (
+      <FormInput
+        type={type}
+        name={name}
+        label={label}
+        sx={{
+          height: 62.7,
+          ml: mount === "entered" ? 0 : -20,
+          mt: mount === "entered" ? 0 : -10.75,
+          opacity: mount === "entered" ? 1 : 0,
+          transition: "all 0.6s ease-in-out",
+        }}
+      />
+    )}
+  </Transition>
 );

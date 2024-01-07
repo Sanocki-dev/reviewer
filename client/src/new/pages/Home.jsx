@@ -1,17 +1,38 @@
 import { useLoaderData } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import ShowcaseLayout from "./ShowcaseLayout";
+import MovieDetails from "./MovieDetails";
 
 const HomePage = () => {
-  const { upcoming, popular } = useLoaderData();
-
-  const img = "https://image.tmdb.org/t/p/w1280/" + upcoming[0].backdrop_path;
+  const { trending, upcoming, popular } = useLoaderData();
+  const randomNum = Math.floor(Math.random() * (19 - 0 + 1));
 
   return (
-    <ShowcaseLayout image={img}>
-      <Box height={400} />
-      <Box height={400} />
-      <Box height={400} />
+    <ShowcaseLayout movie={upcoming[randomNum]}>
+      <Typography variant="h3" sx={{ my: 2, fontWeight: 200, }}>
+        Trending
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {trending.map((movie) => (
+          <MovieDetails movie={movie} />
+        ))}
+      </Box>
+      <Typography variant="h3" sx={{ my: 2, fontWeight: 200 }}>
+        Upcoming
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {upcoming.map((movie) => (
+          <MovieDetails movie={movie} />
+        ))}
+      </Box>
+      <Typography variant="h3" sx={{ my: 2, fontWeight: 200 }}>
+        Popular
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+        {popular.map((movie) => (
+          <MovieDetails movie={movie} />
+        ))}
+      </Box>
     </ShowcaseLayout>
   );
 };

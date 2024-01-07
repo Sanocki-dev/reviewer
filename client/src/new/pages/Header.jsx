@@ -32,6 +32,7 @@ const Container = (props) => (
       alignItems: "center",
       justifyContent: "center",
       position: "fixed",
+      zIndex:2
     }}
   >
     {props.children}

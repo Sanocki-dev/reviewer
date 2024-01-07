@@ -1,19 +1,15 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, IconButton, MenuItem, Tooltip } from "@mui/material";
 
 import FlexRow from "./FlexRow";
-import { setMode } from "@/context";
-import { useState } from "react";
+import { setMode, triggerLogout } from "@/context";
 import MenuPopup from "./MenuPopup";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import AuthForm from "./AuthForm";
-import { triggerLogout } from "@/context";
+import AuthModal from "./AuthModal";
 
 const ProfileActions = () => {
   const { mode, user } = useSelector((state) => state);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = useLoaderData();
   const [anchor, setAnchor] = useState(null);
 
   const open = Boolean(anchor);
@@ -31,8 +27,8 @@ const ProfileActions = () => {
   return (
     <>
       <Container>
-        {!Boolean(token) ? (
-          <AuthForm />
+        {!Boolean(user) ? (
+          <AuthModal />
         ) : (
           <>
             <Tooltip title="Account settings">
@@ -47,7 +43,7 @@ const ProfileActions = () => {
                 <Avatar
                   sx={{ width: 32, height: 32, textTransform: "uppercase" }}
                 >
-                  {user?.userName[0]}
+                  {user?.userName}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -61,7 +57,6 @@ const ProfileActions = () => {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigate(0);
                   dispatch(triggerLogout());
                 }}
               >

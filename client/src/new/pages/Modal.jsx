@@ -18,7 +18,7 @@ const Modal = ({ open, handleClose, children, sx }) => {
         },
       }}
       sx={{
-        zIndex: 0,
+        zIndex: 100,
         overflow: "hidden",
       }}
     >

@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as Yup from "yup";
 
-export const Register = {
+export const RegisterSchema = {
   initialValues: {
     email: "",
     password: "",
@@ -21,6 +21,20 @@ export const Register = {
       .required("Required")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
   }),
+};
+
+export const LoginSchema = {
+  initialValues: {
+    email: "",
+    password: "",
+  },
+  validationSchema: Yup.object({
+    email: Yup.string().email("Invalid email address").required("Required"),
+    password: Yup.string().required("Required"),
+  }),
+};
+
+export const Register = {
   onSubmit: async (values, { setFieldError, setStatus }) => {
     const { code, data } = await getPost("/register", values, setFieldError);
 
@@ -31,14 +45,6 @@ export const Register = {
 };
 
 export const Login = {
-  initialValues: {
-    email: "",
-    password: "",
-  },
-  validationSchema: Yup.object({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required"),
-  }),
   onSubmit: async (values, { setFieldError, setStatus, setErrors }) => {
     const { code, data } = await getPost(
       "/login",
@@ -53,7 +59,7 @@ export const Login = {
   },
 };
 
-const getPost = async (url, body, setFieldError, setErrors) => {
+export const getPost = async (url, body, setFieldError, setErrors) => {
   try {
     const res = await axios.post(import.meta.env.VITE_SITE_URL + url, body, {
       headers: {
@@ -62,19 +68,19 @@ const getPost = async (url, body, setFieldError, setErrors) => {
       },
     });
 
-    return { code: 200, data: res.data };
+    return { success: true, data: res.data };
   } catch (error) {
     let errors = error.response.data;
+
+    if (error.response.status !== 400) {
+      setErrors({ server: "Unable to complete request. Please try again" });
+      return
+    }
 
     Object.keys(errors).forEach((key) => {
       setFieldError(key, errors[key]);
     });
 
-    if (error.response.status !== 400) {
-      setErrors({ server: "Unable to complete request. Please try again" });
-      console.log(error.response);
-    }
-
-    return { code: 400, data: error.response.data };
+    return { data: error.response.data };
   }
 };

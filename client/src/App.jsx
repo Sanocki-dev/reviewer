@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       //     element: <FavoritesPage />,
       //     loader: checkAuthLoader,
       //   },
-      //   { path: "/movie", element: <MoviePage />, loader: MovieLoader },
+        { path: "/movie", element: <MoviePage />, loader: MovieLoader },
       //   { path: "*", element: <Navigate to="/" replace /> },
     ],
   },

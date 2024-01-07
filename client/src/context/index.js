@@ -10,7 +10,6 @@ const initialState = {
   isSidebarOpen: false,
   area: "CA",
   movie: {},
-  isAuthenticating: false,
 };
 
 export const authSlice = createSlice({
@@ -30,7 +29,6 @@ export const authSlice = createSlice({
       state.user = action.payload;
       state.token = localStorage.getItem("token");
       state.isAuth = true;
-      state.isAuthenticating = false;
     },
     // Log the user out
     triggerLogout: (state) => {
