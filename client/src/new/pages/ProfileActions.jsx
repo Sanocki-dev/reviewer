@@ -6,6 +6,7 @@ import FlexRow from "./FlexRow";
 import { setMode, triggerLogout } from "@/context";
 import MenuPopup from "./MenuPopup";
 import AuthModal from "./AuthModal";
+import { Person } from "@mui/icons-material";
 
 const ProfileActions = () => {
   const { mode, user } = useSelector((state) => state);
@@ -41,9 +42,8 @@ const ProfileActions = () => {
                 aria-expanded={open ? "true" : undefined}
               >
                 <Avatar
-                  sx={{ width: 32, height: 32, textTransform: "uppercase" }}
+                  sx={{ bgcolor:"primary.main", width: 32, height: 32, textTransform: "uppercase" }}
                 >
-                  {user?.userName}
                 </Avatar>
               </IconButton>
             </Tooltip>

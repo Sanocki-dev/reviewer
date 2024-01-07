@@ -1,14 +1,23 @@
-import { Box, Button, Chip, Link, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Link,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import GenreChips from "./GenreChips";
 
 const ShowcaseLayout = ({ movie, children }) => {
   const navigate = useNavigate();
+  const { palette } = useTheme();
 
   const onClickHandler = () => {
     navigate({ pathname: "/movie", search: "?id=" + movie?.id });
-  }
+  };
 
   return (
     <Stack width={1} alignItems={"center"} bgcolor={"gainsboro"}>
@@ -16,7 +25,7 @@ const ShowcaseLayout = ({ movie, children }) => {
       <MovieSummary movie={movie} onClick={onClickHandler} />
       <Box
         sx={{
-          background: "linear-gradient(0deg, #393939, transparent)",
+          background: `linear-gradient(0deg, ${palette.background.alt}, transparent)`,
           bgcolor: "background.default",
           width: 1,
           minHeight: 700,
@@ -57,10 +66,10 @@ const MovieSummary = ({ movie, onClick }) => (
       maxWidth: 500,
       height: 600,
       zIndex: 1,
-      color:'white'
+      color: "white",
     }}
   >
-    <Typography variant="h1" >{movie.title}</Typography>
+    <Typography variant="h1">{movie.title}</Typography>
     <Typography variant="h5" sx={{ mt: 3 }}>
       {movie.overview}
     </Typography>

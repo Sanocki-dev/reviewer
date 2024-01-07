@@ -16,16 +16,28 @@ export const colorTokens = {
     1000: "#000000",
   },
   primary: {
-    50: "#E6FBFF",
-    100: "#CCF7FE",
-    200: "#99EEFD",
-    300: "#66E6FC",
-    400: "#33DDFB",
-    500: "#00D5FA",
-    600: "#00A0BC",
-    700: "#006B7D",
-    800: "#00353F",
+    50: "#CAF0F8",
+    100: "#ADE8F4",
+    200: "#90E0EF",
+    300: "#48CAE4",
+    400: "#00B4D8",
+    500: "#0096C7",
+    600: "#0077B6",
+    700: "#023E8A",
+    800: "#03045E",
     900: "#001519",
+  },
+  secondary: {
+    50: "#FFFF3F",
+    100: "#EEEF20",
+    200: "#DDDF00",
+    300: "#D4D700",
+    400: "#BFD200",
+    500: "#AACC00",
+    600: "#80B918",
+    700: "#55A630",
+    800: "#2B9348",
+    900: "#007F5F",
   },
 };
 
@@ -73,7 +85,14 @@ export const themeSettings = (mode) => {
               alt: colorTokens.grey[0],
             },
           }),
+
+      secondary: {
+        dark: colorTokens.secondary[200],
+        main: colorTokens.secondary[500],
+        light: colorTokens.secondary[800],
+      },
     },
+
     typography: {
       fontFamily: ["Roboto", "sans-serif"].join(","),
       fontSize: 12,
