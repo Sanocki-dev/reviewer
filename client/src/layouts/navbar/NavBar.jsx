@@ -11,7 +11,7 @@ const NavBar = () => {
         height: "6rem",
         display: "flex",
         alignItems: "center",
-        pr: 4,
+        // pr: 4,
       }}
     >
       <SidebarControls />

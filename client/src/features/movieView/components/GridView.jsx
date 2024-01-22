@@ -1,6 +1,6 @@
 import { Box, Modal, useMediaQuery } from "@mui/material";
 
-import ScoreCircle from "./ScoreCircle";
+import ScoreCircle from "../../../molecules/ScoreCircle";
 import MovieImage from "./MovieImage";
 import { DetailedView } from "..";
 import { useState } from "react";

@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "universal-cookie";
-const cookies = new Cookies(null, { path: "/" });
 
 const initialState = {
   mode: "dark",
@@ -25,7 +23,7 @@ export const authSlice = createSlice({
       state.movie = action.payload;
     },
     // Log the user in
-    setLogin: (state, action) => {    
+    setLogin: (state, action) => {
       state.user = action.payload;
       state.token = localStorage.getItem("token");
       state.isAuth = true;
@@ -39,7 +37,20 @@ export const authSlice = createSlice({
       localStorage.removeItem("user");
     },
     updateUser: (state, action) => {
-      state.user[action.payload.type] = action.payload.data
+      if (action.payload.type === "watchlists") {
+        const index = state.user.watchlists.findIndex(
+          ({ _id }) => _id === action.payload.data._id
+        );
+
+        if (index != -1) {
+          state.user.watchlists[index] = action.payload.data;
+          return;
+        }
+        
+        state.user.watchlists = action.payload.data;
+        return;
+      }
+      state.user[action.payload.type] = action.payload.data;
     },
     setFollowers: (state, action) => {
       // Checks if the user is logged in

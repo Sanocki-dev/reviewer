@@ -1,5 +1,13 @@
 import { PlaylistAdd } from "@mui/icons-material";
-import { Divider, IconButton, InputBase, Menu, MenuItem } from "@mui/material";
+import {
+  Button,
+  Divider,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -85,18 +93,8 @@ const WatchlistPopup = ({ isOpen, handleClose, anchorEl, movie }) => {
 
       <Divider />
       <MenuItem id="watchlist-name">
-        <Form onSubmit={onCreateHandler}>
-          <InputBase
-            placeholder="New Watchlist"
-            inputProps={{ "aria-label": "create new watchlist" }}
-            onChange={onChangeHandler}
-            onKeyDown={onKeyDownHandler}
-            sx={{ ml: 1, flex: 1 }}
-          />
-        </Form>
-        <IconButton type="submit" onClick={onCreateHandler}>
-          <PlaylistAdd />
-        </IconButton>
+        <Typography mr={2}>Create New</Typography>
+        <PlaylistAdd />
       </MenuItem>
     </Menu>
   );

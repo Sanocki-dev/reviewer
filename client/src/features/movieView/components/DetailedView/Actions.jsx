@@ -7,7 +7,7 @@ import {
   WatchLater,
 } from "@mui/icons-material";
 
-import ScoreCircle from "../ScoreCircle";
+import ScoreCircle from "../../../../molecules/ScoreCircle";
 import ActionBtn from "./ActionBtn";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
