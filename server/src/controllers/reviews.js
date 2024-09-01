@@ -1,17 +1,25 @@
 import { userNotifications } from "../helper/index.js";
 import Review from "../models/Review.js";
+import User from "../models/User.js";
 
 // READ ALL //
 export const readReviews = async (req, res) => {
-  // const reviews = await Review.find().sort({ medals: -1 });
-  res.status(204).json("reviews");
-  // if (!reviews) res.status(404).json({ error: "No reviews yet" });
-  // res.status(200).json(reviews);
+  try {
+    const reviews = await Review.find().sort({ medals: -1 });
+    if (!reviews) res.status(404).json({ error: "No reviews yet" });
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 // CREATE //
 export const createReview = async (req, res) => {
   const { userId, movieId } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) return res.status(401).json({ error: "Unable to review." });
+
   const isNewReview = await Review.findOne({ userId, movieId });
 
   try {

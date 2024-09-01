@@ -10,12 +10,8 @@ const NavBar = () => {
       sx={{
         height: "6rem",
         display: "flex",
-        alignItems: "center",
-        pr: 4,
       }}
     >
-      <SidebarControls />
-
       <Box
         display="flex"
         width="100%"
@@ -25,6 +21,7 @@ const NavBar = () => {
       >
         <SearchBar />
         <ProfileActions />
+        <SidebarControls />
       </Box>
     </Box>
   );

@@ -1,8 +1,11 @@
 import { TextField } from "@mui/material";
 import { useField } from "formik";
+import { useSelector } from "react-redux";
 
 const FormInput = ({ label, ...props }) => {
+  const mode = useSelector((state) => state.mode);
   const [field, meta] = useField(props);
+
   return (
     <TextField
       htmlFor={props.id || props.name}
@@ -14,6 +17,12 @@ const FormInput = ({ label, ...props }) => {
       sx={{
         "& p": {
           height: 10,
+        },
+        input: {
+          "&:-webkit-autofill": {
+            WebkitBoxShadow: "0 0 0 100px #266798 inset",
+            WebkitTextFillColor: mode === "dark" ? "white" : "black",
+          },
         },
       }}
       {...field}

@@ -1,19 +1,23 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import uniqueValidator from 'mongoose-unique-validator'
 
 const UserSchema = new mongoose.Schema(
   {
     userName: {
       type: String,
       required: true,
+      uniqueCaseInsensitive: true,
       trim: true,
-      minlength: 5,
-      maxlength: 50,
+      minlength: 4,
+      maxlength: 15,
+      unique: true
     },
     email: {
       type: String,
       required: true,
+      uniqueCaseInsensitive: true,
       trim: true,
       lowercase: true,
       unique: true,
@@ -52,6 +56,8 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.plugin(uniqueValidator, {message: "Already in use"})
+
 UserSchema.pre("save", async function (next) {
   const user = this;
 
@@ -64,6 +70,7 @@ UserSchema.pre("save", async function (next) {
 
   next();
 });
+
 
 const User = mongoose.model("User", UserSchema);
 

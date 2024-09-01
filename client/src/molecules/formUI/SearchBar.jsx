@@ -10,10 +10,9 @@ import {
   Popover,
   Rating,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate, createSearchParams, Form } from "react-router-dom";
 
 const SearchBar = ({ filled, placeholder, fullWidth }) => {
   const [params, setParams] = useState("");
@@ -25,7 +24,6 @@ const SearchBar = ({ filled, placeholder, fullWidth }) => {
     e.preventDefault();
 
     const query = { query: params, page: 1 };
-
     navigate({
       pathname: "/search",
       search: `${createSearchParams(query)}`,
@@ -41,12 +39,12 @@ const SearchBar = ({ filled, placeholder, fullWidth }) => {
       borderColor="neutral.light"
       borderRadius={4}
       width="100%"
-      maxWidth={fullWidth ? 'initial' : 700}
+      maxWidth={fullWidth ? "initial" : 700}
       display="flex"
       transition="width .3s ease-in-out"
       bgcolor={filled ? "neutral.light" : "unset"}
     >
-      <form action="post" onSubmit={onSubmitHandler}>
+      <Form onSubmit={onSubmitHandler}>
         <IconButton
           disabled
           disableRipple
@@ -133,7 +131,7 @@ const SearchBar = ({ filled, placeholder, fullWidth }) => {
             </Box>
           </Popover>
         </div>
-      </form>
+      </Form>
     </Box>
   );
 };

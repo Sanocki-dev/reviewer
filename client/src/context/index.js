@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "universal-cookie";
-const cookies = new Cookies(null, { path: "/" });
 
 const initialState = {
   mode: "dark",
@@ -10,7 +8,6 @@ const initialState = {
   isSidebarOpen: false,
   area: "CA",
   movie: {},
-  isAuthenticating: false,
 };
 
 export const authSlice = createSlice({
@@ -27,24 +24,33 @@ export const authSlice = createSlice({
     },
     // Log the user in
     setLogin: (state, action) => {
-      console.log(action)
-      console.log(cookies.get("token"))
-      
       state.user = action.payload;
-      state.token = cookies.get("token");
+      state.token = localStorage.getItem("token");
       state.isAuth = true;
-      state.isAuthenticating = false;
     },
     // Log the user out
     triggerLogout: (state) => {
       state.user = null;
       state.token = null;
       state.isAuth = false;
-      cookies.remove("token");
-      cookies.remove("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     },
     updateUser: (state, action) => {
-      state.user[action.payload.type] = action.payload.data
+      if (action.payload.type === "watchlists") {
+        const index = state.user.watchlists.findIndex(
+          ({ _id }) => _id === action.payload.data._id
+        );
+
+        if (index != -1) {
+          state.user.watchlists[index] = action.payload.data;
+          return;
+        }
+
+        state.user.watchlists = action.payload.data;
+        return;
+      }
+      state.user[action.payload.type] = action.payload.data;
     },
     setFollowers: (state, action) => {
       // Checks if the user is logged in
@@ -57,9 +63,6 @@ export const authSlice = createSlice({
     // Toggles the sidebar
     toggleSidebar: (state) => {
       state.isSidebarOpen = !state.isSidebarOpen;
-    },
-    toggleIsAuthenticating: (state) => {
-      state.isAuthenticating = !state.isAuthenticating;
     },
   },
 });

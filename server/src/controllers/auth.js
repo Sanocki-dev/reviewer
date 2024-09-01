@@ -26,18 +26,13 @@ export const register = async (req, res) => {
       token: createToken(newUser._id),
     });
   } catch (error) {
-    let errors = {};
-
-    if (error.name === "ValidationError") {
-      Object.keys(error.errors).forEach((key) => {
-        errors[key] = error.errors[key].message;
-      });
-    } else if (error.name === "MongoServerError" && error.code === 11000) {
-      errors["email"] = "Already in use";
-    } else {
+    if (error.name !== "ValidationError")
       res.status(500).send("Something went wrong");
-    }
 
+    let errors = {};
+    Object.keys(error.errors).forEach((key) => {
+      errors[key] = error.errors[key].message;
+    });
     return res.status(400).send(errors);
   }
 };
@@ -57,7 +52,10 @@ export const login = async (req, res) => {
     createToken();
 
     // Get all users data and return it with the initial login
-    const lists = await WatchList.find({ userId: user.id }, { name: 1, genre: 1 });
+    const lists = await WatchList.find(
+      { userId: user.id },
+      { name: 1, genre: 1 }
+    );
 
     const userResponse = {
       friends: user.friends,
@@ -67,7 +65,7 @@ export const login = async (req, res) => {
       picturePath: user.picturePath,
       medals: user.medals,
       userName: user.userName,
-      watchlists: lists
+      watchlists: lists,
     };
 
     res.status(200).json({ user: userResponse, token: createToken(user._id) });
