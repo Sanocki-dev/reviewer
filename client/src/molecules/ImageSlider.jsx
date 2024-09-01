@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import ImageSliderButton from "./ImageSliderButton";
 
-function ImageSlider({ images }) {
+const ImageSlider = ({ images }) => {
   const [index, setIndex] = useState(0);
 
   const formattedImages = useMemo(() => {
@@ -16,6 +16,8 @@ function ImageSlider({ images }) {
 
     return image;
   }, [images]);
+
+  if (formattedImages.length == 0) return;
 
   const changeImage = (direction) => {
     let length = formattedImages.length - 1;
@@ -36,7 +38,7 @@ function ImageSlider({ images }) {
       <ImageSliderButton right onClick={() => changeImage(true)} />
     </Container>
   );
-}
+};
 
 export default ImageSlider;
 
@@ -52,7 +54,7 @@ const Container = (props) => (
       minWidth: 270,
       position: "relative",
       borderRadius: 2,
-      overflow:'hidden',
+      overflow: "hidden",
       bgcolor: "background.alt",
     }}
   >

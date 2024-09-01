@@ -8,57 +8,75 @@ const url = "https://image.tmdb.org/t/p/w1280";
 const noImageURL =
   "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
 
-const MovieCard = ({ movie }) => {
+const MediaCard = ({ media, type, last }) => {
   const navigate = useNavigate();
   const [flip, setFlip] = useState(true);
 
   const triggerFlip = () => {
+    if (type === "person") {
+      console.log('first')
+      onClickHandler();
+    }
     setFlip((state) => !state);
   };
 
   const onClickHandler = (e) => {
-    e.stopPropagation();
-    navigate({ pathname: "/movie", search: "?id=" + movie?.id });
+    e?.stopPropagation();
+
+    navigate({ pathname: "/" + type, search: "?id=" + media?.id });
   };
 
+  const picture = type !== "person" ? media?.poster_path : media?.profile_path;
+
   return (
-    <Card flip={flip} onClick={triggerFlip}>
-      <Front image={movie.poster_path} />
+    <Card
+      flip={flip}
+      onClick={triggerFlip}
+      small={type === "person"}
+      last={last}
+    >
+      <Front image={picture} alt={media?.title || media?.name} />
       <Back>
         <Typography variant="h6" noWrap>
-          {movie.title}
+          {media?.title || media?.name}
         </Typography>
         <Typography variant="caption" height={145} overflow={"hidden"}>
-          {movie.overview.substring(0, 200)}...
+          {media.overview?.substring(0, 200)}
         </Typography>
         <Box height={100}>
           <GenreChips
-            ids={movie.genre_ids}
+            ids={media?.genre_ids}
             sx={{ mt: 1, flexWrap: "wrap" }}
             amount={4}
           />
         </Box>
-        <Link onClick={onClickHandler} variant="caption">
-          Go To Movie Page
+        <Link
+          onClick={onClickHandler}
+          variant="caption"
+          sx={{ textTransform: "capitalize" }}
+        >
+          Go To {type} Page
         </Link>
       </Back>
     </Card>
   );
 };
 
-export default MovieCard;
+export default MediaCard;
 
 const Card = (props) => (
   <Box
     sx={{
       cursor: "pointer",
-      width: 200,
-      height: 300,
+      width: props.small ? 100 : 200,
+      height: props.small ? 150 : 300,
       transform: props.flip ? "transform: rotateY(0deg);" : "rotateY(180deg)",
       perspective: "1000px",
       transformStyle: "preserve-3d",
       transition: "transform 1s",
       position: "relative",
+      mr: props.last ? "auto" : undefined,
+      ml: props.last ? "auto" : undefined,
     }}
     onClick={props.onClick}
   >
@@ -72,17 +90,18 @@ const Front = (props) => (
       borderRadius: 2,
       position: "absolute",
       backfaceVisibility: "hidden",
-
       width: 1,
       height: 1,
-      backgroundImage: !props.image
-        ? `url(${noImageURL})`
-        : `url(${url}${props.image})`,
+      backgroundImage: !props.image ? `undefined` : `url(${url}${props.image})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      bgcolor: "background.alt",
     }}
   >
-    {props.children}
+    {!props.image ? props.alt : props.children}
   </Box>
 );
 

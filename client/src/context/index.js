@@ -46,7 +46,7 @@ export const authSlice = createSlice({
           state.user.watchlists[index] = action.payload.data;
           return;
         }
-        
+
         state.user.watchlists = action.payload.data;
         return;
       }

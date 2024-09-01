@@ -1,25 +1,28 @@
 import { Box } from "@mui/material";
 
-import MovieCard from "@/organisms/Movie/MovieCard";
+import MediaCard from "@/organisms/Movie/MediaCard";
 import SectionHeader from "@/molecules/SectionHeader";
 
-const Section = ({ movies, title }) => {
-
+const Section = ({ data, title, type }) => {
   return (
     <>
       <SectionHeader title={title} />
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
+          display: "grid",
+          gridTemplateColumns: `repeat(auto-fit,${
+            type === "person" ? "100px" : "200px"
+          })`,
+
+          flexWrap: type ? "nowrap" : "wrap",
           justifyContent: "center",
           gap: 1,
-          maxWidth: 1080,
-          mx: "auto",
+          px: 6,
+          mb: 2,
         }}
       >
-        {movies.map((movie, index) => (
-          <MovieCard key={index} movie={movie} />
+        {data?.map((media, index) => (
+          <MediaCard key={index} media={media} type={type || "movie"} />
         ))}
       </Box>
     </>

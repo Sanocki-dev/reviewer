@@ -17,22 +17,23 @@ export const colorTokens = {
   },
   background: {
     50: "#E0E1DD",
-    100: "#778DA9",
-    200: "#415A77",
-    300: "#1B263B",
-    400: "#0D1B2A",
+    100: "#535052",
+    200: "#494647",
+    300: "#343233",
+    400: "#151414",
+    500: "#0A0A0A",
   },
   primary: {
-    50: "#CAF0F8",
-    100: "#ADE8F4",
-    200: "#90E0EF",
-    300: "#48CAE4",
-    400: "#00B4D8",
-    500: "#0096C7",
-    600: "#0077B6",
-    700: "#023E8A",
-    800: "#03045E",
-    900: "#001519",
+    50: "#EEE9D3",
+    100: "#E8E2C5",
+    200: "#E2DBB6",
+    300: "#D7CD98",
+    400: "#CCBF7B",
+    500: "#CBBF7A",
+    600: "#C0B15D",
+    700: "#B0A045",
+    800: "#938539",
+    900: "#766B2E",
   },
   secondary: {
     50: "#FFFF3F",
@@ -57,8 +58,9 @@ export const themeSettings = (mode) => {
         ? {
             // palette values for dark mode
             primary: {
+              // contrastText: "#fff",
               dark: colorTokens.primary[200],
-              main: colorTokens.primary[500],
+              main: colorTokens.primary[700],
               600: colorTokens.primary[600],
               900: colorTokens.primary[900],
               light: colorTokens.primary[800],
@@ -72,15 +74,19 @@ export const themeSettings = (mode) => {
             },
             background: {
               light: colorTokens.background[200],
+              main: colorTokens.background[500],
               default: colorTokens.background[300],
               alt: colorTokens.background[400],
+              transparent: '#ffffff05',
+
             },
           }
         : {
             // palette values for light mode
             primary: {
+              contrastText: "#fff",
               dark: colorTokens.primary[700],
-              main: colorTokens.primary[500],
+              main: colorTokens.primary[700],
               600: colorTokens.primary[300],
               900: colorTokens.primary[200],
               light: colorTokens.primary[50],
@@ -93,9 +99,11 @@ export const themeSettings = (mode) => {
               light: colorTokens.grey[50],
             },
             background: {
-              light: colorTokens.grey[10],
-              default: colorTokens.grey[50],
-              alt: colorTokens.grey[100],
+              light: colorTokens.grey[100],
+              main: colorTokens.grey[100],
+              default: colorTokens.grey[10],
+              alt: colorTokens.grey[10],
+              transparent: '#ffffff50',
             },
           }),
       secondary: {

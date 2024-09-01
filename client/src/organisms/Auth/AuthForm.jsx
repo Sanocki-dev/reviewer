@@ -1,12 +1,15 @@
 import { useMemo } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
-import { Button, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import { Transition } from "react-transition-group";
 
 import { setLogin } from "@/context";
 import { FormInput, Success } from "@/molecules/formUI";
-import { LoginSchema, RegisterSchema, getPost } from "@/utils/formiks";
+import { LoginSchema, RegisterSchema } from "@/utils/formiks";
+import { GetPost } from "@/utils/getFetch";
+import Action from "@/atoms/Button";
+import { Login } from "@mui/icons-material";
 
 const AuthForm = ({ isLogin, handleClose }) => {
   const dispatch = useDispatch();
@@ -21,17 +24,11 @@ const AuthForm = ({ isLogin, handleClose }) => {
     { setFieldError, setErrors, setStatus }
   ) => {
     try {
-      const url = isLogin ? "/register" : "/login";
-
-      const { success, data } = await getPost(
-        url,
-        values,
-        setFieldError,
-        setErrors
-      );
+      let url = isLogin ? "register" : "login"; // GET RID OF /
+      const { data, status } = await GetPost(url, values);
 
       // Check if it was a success
-      if (!success) return;
+      if (status !== 200) return;
       localStorage.setItem("token", data.token);
       setStatus(200);
 
@@ -43,27 +40,59 @@ const AuthForm = ({ isLogin, handleClose }) => {
         dispatch(setLogin(data.user));
       }, 2200);
     } catch (error) {
-      console.log(error);
+      let errors = error.response?.data;
+      console.log(errors);
+
+      if (error.response.status !== 400) {
+        setErrors({ server: "Unable to complete request. Please try again" });
+        return;
+      }
+
+      if (errors?.message) {
+        setFieldError("userName", errors.message);
+      }
+
+      Object.keys(errors).forEach((key) => {
+        setFieldError(key, errors[key]);
+      });
     }
   };
 
   return (
-    <Formik {...formik} onSubmit={onSubmitHandler}>
+    <Formik enableReinitialize {...formik} onSubmit={onSubmitHandler}>
       {(form) => {
         return (
           <Form>
             <Success start={form.status === 200}>
               <Typography variant="h1">Success!</Typography>
-              <Typography color={"primary.main"}>Welcome back</Typography>
+              <Typography color={"primary.main"}>
+                Welcome{!isLogin && " back"}
+              </Typography>
             </Success>
 
             <Typography variant="subtitle2" color={"error"}>
               {form.errors.server}
             </Typography>
 
-            <FormInput type="text" name="email" label="Email" />
-            <AnimatedInput animate={isLogin} name="userName" label="Username" />
-            <FormInput type="password" name="password" label="Password" />
+            <FormInput name="userName" label="Username" />
+            <AnimatedInput
+              animate={isLogin}
+              type="email"
+              name="email"
+              label="Email"
+            />
+            <Box width={1}>
+              <FormInput type="password" name="password" label="Password" />
+              {!isLogin && (
+                <Link
+                  component={"button"}
+                  underline="none"
+                  sx={{ width: 1, textAlign: "right", fontSize: "10pt" }}
+                >
+                  Forgot password
+                </Link>
+              )}
+            </Box>
             <AnimatedInput
               animate={isLogin}
               type="password"
@@ -71,15 +100,16 @@ const AuthForm = ({ isLogin, handleClose }) => {
               label="Confirm Password"
             />
 
-            <Button
+            <Action
               type="submit"
+              tooltip="Submit form"
               fullWidth
+              startIcon={<Login />}
               disabled={form.isSubmitting}
-              sx={{ borderRadius: 3, textTransform: "none" }}
               variant="contained"
-            >
-              {isLogin ? "Register" : "Login"}
-            </Button>
+              showText
+              text={isLogin ? "Register" : "Login"}
+            />
           </Form>
         );
       }}

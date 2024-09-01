@@ -1,5 +1,4 @@
 import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
-import axios from "axios";
 import { Form, Formik } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
@@ -12,6 +11,7 @@ import {
   Success,
 } from "@/molecules/formUI";
 import { updateUser } from "@/context";
+import { GetPost } from "@/utils/getFetch";
 
 const CreateWatchlistForm = ({ user, handleClose }) => {
   const dispatch = useDispatch();
@@ -38,28 +38,23 @@ const CreateWatchlistForm = ({ user, handleClose }) => {
       onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
         setSubmitting(true);
         try {
-          let { data } = await axios.post(
-            //import.meta.env.VITE_SITE_URL
-            //"http://localhost:8888/"
-            import.meta.env.VITE_SITE_URL + "watchList",
-            {
-              userId: user.id,
-              movieId: movie.id,
-              ...values,
-            }
-          );
+          let { data } = await GetPost("watchList", {
+            userId: user.id,
+            movie: { id: movie.id, title: movie.title },
+            ...values,
+          });
+
+          dispatch(updateUser({ type: "watchlists", data }));
+
           setStatus(200);
+
           setTimeout(() => {
             handleClose();
           }, 1500);
 
-          setTimeout(() => {
-            dispatch(updateUser({ type: "watchlists", data }));
-          }, 2200);
-
           setSubmitting(false);
         } catch (error) {
-          if (error.response.status === 406) {
+          if (error.response?.status === 406) {
             setErrors(error.response.data);
           }
           console.log(error);
@@ -74,7 +69,7 @@ const CreateWatchlistForm = ({ user, handleClose }) => {
             </Typography>
 
             <Typography
-              variant={isMobile ? 'body2' :"body1"}
+              variant={isMobile ? "body2" : "body1"}
               textAlign={"center"}
               color={"grey.400"}
               // height={50}
@@ -93,8 +88,7 @@ const CreateWatchlistForm = ({ user, handleClose }) => {
               {form.errors.server}
             </Typography>
 
-            {console.log(form)}
-            <Success start={form.status === 200}>
+            <Success start={form?.status === 200}>
               <Typography variant="h1">Success!</Typography>
               <Typography color={"primary.main"}>Watchlist Created</Typography>
             </Success>

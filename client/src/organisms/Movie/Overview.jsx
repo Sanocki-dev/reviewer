@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import GenreChips from "@/molecules/GenreChips";
+import { baseImageURL } from "@/data/Images";
 
 const Overview = ({ data }) => {
   return (
@@ -15,9 +16,9 @@ const Overview = ({ data }) => {
       </Typography>
       <Typography flex={1}>{data.overview}</Typography>
       <GenreChips size={"large"} gap={2} names ids={data.genres} />
-      <Box mt={2}>
+      <Box mt={1} gap={2} display={"flex"}>
         <div>
-          <Typography variant="subtitle2">Languages:</Typography>
+          <Typography variant="caption">Languages:</Typography>
           <Typography>
             {data.spoken_languages.map(
               ({ english_name }, index) =>
@@ -26,16 +27,31 @@ const Overview = ({ data }) => {
             )}
           </Typography>
         </div>
-      </Box>
-      <Box display={"flex"} mt={1} gap={2}>
         <div>
-          <Typography variant="subtitle2">Budget: </Typography>
+          <Typography variant="caption">Release Date:</Typography>
+          <Typography>{data.release_date}</Typography>
+        </div>
+      </Box>
+
+      <Box display={"flex"} my={1} gap={2}>
+        <div>
+          <Typography variant="caption">Budget: </Typography>
           <Typography>${data.budget.toLocaleString()}</Typography>
         </div>
         <div>
-          <Typography variant="subtitle2">Revenue: </Typography>
+          <Typography variant="caption">Revenue: </Typography>
           <Typography>${data.revenue.toLocaleString()}</Typography>
         </div>
+      </Box>
+
+      <Typography variant="caption">Production Companies</Typography>
+      <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"}>
+        <Typography>
+          {data.production_companies?.map(
+            ({ name }, i) =>
+              name + (i !== data?.production_companies.length && ", ")
+          )}
+        </Typography>
       </Box>
     </Box>
   );

@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material";
 
-const Logo = ({ main, secondary, height }) => {
+const Logo = ({ main, secondary, height = 80 }) => {
   const theme = useTheme();
   
   const mainColor = main || theme.palette.primary.main;
@@ -10,7 +10,7 @@ const Logo = ({ main, secondary, height }) => {
 
   return (
     <svg
-      width="19.706259mm"
+      width={height}
       height={height}
       viewBox="0 0 19.706259 14.015151"
       version="1.1"

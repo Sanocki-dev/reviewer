@@ -1,16 +1,18 @@
-import { IconButton, MenuItem, MenuList, useMediaQuery } from "@mui/material";
+import { Box, MenuItem, MenuList, useMediaQuery } from "@mui/material";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import FlexRow from "@/atoms/FlexRow";
-import { Explore, MoreVert, WatchLater } from "@mui/icons-material";
+import { Explore, Menu, WatchLater } from "@mui/icons-material";
 
 import ClickableLogo from "@/molecules/ClickableLogo";
 import SideBar from "@/organisms/Navbar/Sidebar";
+import Action from "@/atoms/Button";
+import { useSelector } from "react-redux";
 
 const Navigation = () => {
   const selected = window.location.pathname.toLowerCase();
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const token = useLoaderData();
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +37,7 @@ const Navigation = () => {
       name: "Watchlists",
       url: "/watchlist",
       isAuth: true,
-      disabled: !Boolean(token),
+      disabled: !Boolean(user),
       icon: <WatchLater />,
     },
   ];
@@ -43,9 +45,13 @@ const Navigation = () => {
   if (isMobile)
     return (
       <>
-        <IconButton sx={{ pl: 3, pr: 2 }} onClick={handleClick}>
-          <MoreVert />
-        </IconButton>
+        <Action
+          tooltip="Open Sidebar"
+          sx={{ pl: 3, pr: 2 }}
+          startIcon={<Menu />}
+          disableRipple
+          onClick={handleClick}
+        />
         <SideBar isOpen={open} onClose={handleClose} links={links} />
       </>
     );
@@ -53,9 +59,10 @@ const Navigation = () => {
   return (
     <FlexRow>
       <ClickableLogo />
-      <MenuList sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr:2 }}>
         {links.map(({ id, name, url, disabled }) => (
-          <MenuItem
+          <Action
+            variant="text"
             key={id}
             id={id}
             onClick={onRedirectHandler}
@@ -63,9 +70,9 @@ const Navigation = () => {
             disabled={disabled}
           >
             {name}
-          </MenuItem>
+          </Action>
         ))}
-      </MenuList>
+      </Box>
     </FlexRow>
   );
 };

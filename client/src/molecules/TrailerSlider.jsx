@@ -1,8 +1,8 @@
+import React, { useMemo, useState } from "react";
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
-import React, { useMemo, useState } from "react";
 
-function TrailerSlider({ videos, isMobile }) {
+const TrailerSlider = ({ videos, isMobile }) => {
   const [index, setIndex] = useState(0);
 
   const formattedVideos = useMemo(() => {
@@ -24,6 +24,8 @@ function TrailerSlider({ videos, isMobile }) {
     return video;
   }, [videos]);
 
+  if (formattedVideos.length === 0) return null;
+
   const changeVideo = (direction) => {
     let length = formattedVideos.length - 1;
 
@@ -38,7 +40,7 @@ function TrailerSlider({ videos, isMobile }) {
 
   return (
     <Container isMobile={isMobile}>
-      <VideoPlayer video={formattedVideos[index].uri} />
+      <VideoPlayer video={formattedVideos[index]?.uri} />
       <Box
         width={1}
         display={"flex"}
@@ -48,14 +50,14 @@ function TrailerSlider({ videos, isMobile }) {
         <IconButton onClick={() => changeVideo(false)}>
           <ArrowBackIosNew />
         </IconButton>
-        <Typography noWrap>{formattedVideos[index].name}</Typography>
+        <Typography noWrap>{formattedVideos[index]?.name}</Typography>
         <IconButton onClick={() => changeVideo(true)}>
           <ArrowForwardIos />
         </IconButton>
       </Box>
     </Container>
   );
-}
+};
 
 export default TrailerSlider;
 

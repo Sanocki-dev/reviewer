@@ -4,6 +4,8 @@ import ProviderChips from "@/molecules/ProviderChips";
 const Providers = ({ data }) => {
   const providers = data["watch/providers"]?.results["CA"];
 
+  if (!providers) return;
+
   return (
     <Box
       width={"100%"}

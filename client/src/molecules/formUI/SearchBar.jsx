@@ -21,7 +21,6 @@ const SearchBar = ({ filled, placeholder, fullWidth }) => {
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
-    console.log(query)
     e.preventDefault();
 
     const query = { query: params, page: 1 };

@@ -1,9 +1,10 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import MovieActions from "@/molecules/MovieActions";
+import IMDBRating from "@/molecules/IMDB";
 
 const MovieName = ({ data }) => {
   const runtimeHours = Math.floor(data.runtime / 60);
-  const runtimeMinutes = data.runtime - runtimeHours * 60;
+  const runtimeMinutes = data.runtime % 60;
 
   const rating = data.release_dates?.results
     .find(({ iso_3166_1 }) => iso_3166_1 == "US")
@@ -20,11 +21,11 @@ const MovieName = ({ data }) => {
         gap={1}
       >
         <Typography variant="h1" fontWeight="bold">
-          {data.title}
+          {data.title || data.name}
         </Typography>
         <MovieActions id={data.id} title={data.title} />
       </Box>
-      <Typography mt={1} variant="subtitle1" color="neutral.main">
+      <Typography my={1} variant="subtitle1" color="neutral.main">
         {data.tagline}
       </Typography>
       <Stack mb={2} direction={"row"} gap={1} alignItems="baseline">
@@ -45,6 +46,9 @@ const MovieName = ({ data }) => {
         <Typography variant="h5">
           {runtimeHours}h {runtimeMinutes}m
         </Typography>
+        <Divider orientation="vertical" variant="middle" flexItem />
+
+        <IMDBRating id={data.imdb_id} alt={data.title || data.name} />
       </Stack>
     </>
   );

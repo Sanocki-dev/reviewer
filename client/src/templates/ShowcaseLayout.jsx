@@ -1,44 +1,37 @@
-import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { light, dark } from "@/assets/background";
 import GenreChips from "@/molecules/GenreChips";
+import ShowcaseImage from "@/molecules/ShowcaseImage";
 
-const ShowcaseLayout = ({ movie, children }) => {
+const ShowcaseLayout = ({ movie, children, backdrop, width = "75%" }) => {
   const navigate = useNavigate();
-  const { palette } = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-
-  const bg = palette.mode === "dark" ? dark : light;
 
   const onClickHandler = () => {
     navigate({ pathname: "/movie", search: "?id=" + movie?.id });
   };
 
   return (
-    <Stack width={1} alignItems={"center"} bgcolor={"gainsboro"}>
-      <BackdropImage image={movie.poster_path} />
-      <MovieSummary movie={movie} onClick={onClickHandler} />
+    <Stack width={1} alignItems={"center"}>
+      <ShowcaseImage image={movie.backdrop_path} />
+      {!backdrop && (
+        <MovieSummary
+          movie={movie}
+          onClick={onClickHandler}
+          isMobile={isMobile}
+        />
+      )}
+
       <Box
-        component="section"
         sx={{
-          background: `url(${bg})`,
-          backgroundSize: "cover",
-          bgcolor: "background.default",
-          width: 1,
-          minHeight: 700,
+          width: isMobile ? 1 : width,
+          mx: "auto",
+          my: 2,
+          zIndex: 1,
         }}
       >
-        <Box sx={{ width: isMobile ? 1 : "80%", mx: "auto", my: 2 }}>
-          {children}
-        </Box>
+        {children}
       </Box>
     </Stack>
   );
@@ -46,34 +39,18 @@ const ShowcaseLayout = ({ movie, children }) => {
 
 export default ShowcaseLayout;
 
-const BackdropImage = ({ image }) => (
-  <Box
-    component={"img"}
-    src={"https://image.tmdb.org/t/p/w1280/" + image}
-    sx={{
-      width: 1,
-      objectFit: "cover",
-      objectPosition: "center",
-      zIndex: 0,
-      position: "absolute",
-      height: 600,
-      filter: " brightness(.7)",
-      pointerEvents: "none",
-    }}
-  />
-);
-
-const MovieSummary = ({ movie, onClick }) => (
+const MovieSummary = ({ movie, onClick, isMobile }) => (
   <Stack
     sx={{
       justifyContent: "center",
-      width: "50%",
+      width: isMobile ? 1 : "50%",
       alignSelf: "flex-start",
-      ml: "15%",
+      ml: isMobile ? 0 : "16%",
       maxWidth: 500,
       height: 600,
       zIndex: 1,
       color: "white",
+      px: isMobile ? 2 : 4,
     }}
   >
     <Typography variant="h1">{movie.title}</Typography>
@@ -83,7 +60,7 @@ const MovieSummary = ({ movie, onClick }) => (
     >
       {movie.overview}
     </Typography>
-    <GenreChips ids={movie.genre_ids} />
+    <GenreChips variant="solid" color="primary" ids={movie.genre_ids} />
     <Button
       sx={{ mt: 3, width: "110px" }}
       variant="contained"

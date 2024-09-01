@@ -1,16 +1,16 @@
 import { useLoaderData } from "react-router-dom";
-import ShowcaseLayout from "../templates/ShowcaseLayout";
-import Section from "../templates/Section";
+import ShowcaseLayout from "@/templates/ShowcaseLayout";
+import Section from "@/templates/Section";
 
 const HomePage = () => {
   const { trending, upcoming, popular } = useLoaderData();
   const randomNum = Math.floor(Math.random() * (19 - 0 + 1));
 
   return (
-    <ShowcaseLayout movie={trending[randomNum]}>
-      <Section movies={trending} title="Trending" />
-      <Section movies={upcoming} title="Upcoming" />
-      <Section movies={popular} title="popular" />
+    <ShowcaseLayout movie={trending[randomNum]} width="100%">
+      <Section data={trending} title="Trending" />
+      <Section data={upcoming} title="Upcoming" />
+      <Section data={popular} title="popular" />
     </ShowcaseLayout>
   );
 };

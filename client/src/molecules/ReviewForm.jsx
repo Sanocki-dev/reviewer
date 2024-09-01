@@ -10,6 +10,7 @@ import Modal from "@/templates/Modal";
 import ScoreCircle from "./ScoreCircle";
 import Action from "@/atoms/Button";
 import { GetPost, GetPatch, GetDelete } from "@/utils/getFetch";
+import LoginModal from "@/organisms/Auth/LoginModal";
 
 const init = { review: "", rating: 0, isPrivate: false };
 const ReviewForm = ({
@@ -17,10 +18,12 @@ const ReviewForm = ({
   user,
   create,
   initialValues = init,
-  refresh,
+  onUpdate,
   onDelete,
+  updateReview
 }) => {
   const [open, setOpen] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
   const data = useLoaderData();
 
   const onDeleteHandler = async () => {
@@ -32,25 +35,33 @@ const ReviewForm = ({
     }
   };
 
+  const onOpenHandler = () => {
+    if (!user) {
+      setOpenLogin(true);
+      return;
+    }
+    setOpen(true);
+  };
+
   return (
     <>
       {create && (
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => setOpen(true)}
-          sx={{ height: 80, fontSize: 20, mb: 2, textTransform: "none" }}
-        >
-          Create your own Review!
-        </Button>
+        <>
+          <Button
+            variant="outlined"
+            fullWidth
+            color="primary"
+            onClick={onOpenHandler}
+            sx={{ height: 80, fontSize: 20, mb: 2, textTransform: "none" }}
+          >
+            Create your own Review!
+          </Button>
+          <LoginModal open={openLogin} close={() => setOpenLogin(false)} />
+        </>
       )}
       {show && (
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Action
-            tooltip="Edit review"
-            onClick={() => setOpen(true)}
-            text={"Edit"}
-          >
+          <Action tooltip="Edit review" onClick={onOpenHandler} text={"Edit"}>
             <Edit />
           </Action>
           <Action
@@ -77,7 +88,7 @@ const ReviewForm = ({
           })}
           onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
             try {
-              let res = undefined
+              let res = undefined;
               // They are updating a post
               if (!create) {
                 res = await GetPatch("review/" + initialValues._id, {
@@ -87,17 +98,17 @@ const ReviewForm = ({
               } else {
                 res = await GetPost("review", {
                   movieId: data.id,
+                  title: data.title,
                   userId: user.id,
+                  userName: user.userName,
                   ...values,
                 });
                 setStatus(201);
               }
 
-              console.log(res.data)
-
               setTimeout(() => {
+                onUpdate(res.data);
                 setOpen(!open);
-                refresh(res?.data);
               }, 1500);
 
               setSubmitting(false);

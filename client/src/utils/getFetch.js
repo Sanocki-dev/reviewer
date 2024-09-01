@@ -2,9 +2,9 @@ import axios from "axios";
 import { tokenLoader } from "./auth";
 
 const BASE = import.meta.env.VITE_SITE_URL;
-//"http://localhost:8888/"
+// "http://localhost:3001/";
 
-export const GetPatch = async (url, body, headers) => {
+export const GetPatch = (url, body, headers) => {
   return axios.patch(
     BASE + url,
     { ...body },
@@ -12,13 +12,13 @@ export const GetPatch = async (url, body, headers) => {
   );
 };
 
-export const GetFetch = async (url, headers) => {
+export const GetFetch = (url, headers) => {
   return axios.get(BASE + url, {
     headers: { Authorization: tokenLoader(), ...headers },
   });
 };
 
-export const GetPost = async (url, body, headers) => {
+export const GetPost = (url, body, headers) => {
   return axios.post(
     BASE + url,
     { ...body },
@@ -26,7 +26,7 @@ export const GetPost = async (url, body, headers) => {
   );
 };
 
-export const GetDelete = async (url, headers) => {
+export const GetDelete = (url, headers) => {
   return axios.delete(BASE + url, {
     headers: { Authorization: tokenLoader(), ...headers },
   });
