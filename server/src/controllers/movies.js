@@ -1,4 +1,5 @@
 import { getFetch } from "../lib/getFetch.js";
+import querystring from "node:querystring";
 import Review from "../models/Review.js";
 
 const headers = {
@@ -11,9 +12,60 @@ const headers = {
   },
 };
 
+// PERSON SEARCH //
+export const getPerson = async (req, res) => {
+  const { id } = req.query;
+
+  const url = `https://api.themoviedb.org/3/person/${id}?append_to_response=movie_credits,tv_credits`;
+
+  try {
+    const results = await getFetch({
+      url,
+      headers: headers.TMDB,
+    });
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(400);
+  }
+};
+
+// Show SEARCH //
+export const getShow = async (req, res) => {
+  const { id } = req.query;
+  const url = `https://api.themoviedb.org/3/tv/${id}`;
+
+  try {
+    const results = await getFetch({
+      url,
+      headers: headers.TMDB,
+    });
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(400);
+  }
+};
+
+// MOVIE SEARCH //
+export const getTrending = async (req, res) => {
+  const url = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`;
+
+  try {
+    const results = await getFetch({
+      url,
+      headers: headers.TMDB,
+    });
+
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(400);
+  }
+};
+
 // MOVIE SEARCH //
 export const getMovies = async (req, res) => {
-  const url = `https://api.themoviedb.org/3/search/movie?query=${req.query.search}`;
+  const url = `https://api.themoviedb.org/3/search/movie?${req._parsedUrl.query}`;
 
   try {
     const { total_pages, page, results } = await getFetch({
@@ -21,15 +73,7 @@ export const getMovies = async (req, res) => {
       headers: headers.TMDB,
     });
 
-    let formattedList = [];
-
-    for (let index = 0; index < results.length; index++) {
-      let { data } = await movieDetails(results[index].id);
-      data.videos = await formatVideos(data.videos.results);
-      formattedList.push(data);
-    }
-
-    res.status(200).json({ results: formattedList, page, total_pages });
+    res.status(200).json({ results, page, total_pages });
   } catch (error) {
     res.status(400);
   }
@@ -68,29 +112,32 @@ const movieDetails = async (id) => {
   }
 };
 
+export const multiSearch = async (req, res) => {
+  const queryString = querystring.stringify(req.query);
+
+  try {
+    const response = await getFetch({
+      url: `https://api.themoviedb.org/3/search/multi?${queryString}`,
+      headers: headers.TMDB,
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).send();
+  }
+};
+
 // RETRIEVE MOVIE ratings
 export const getAllMovieDetails = async (req, res) => {
   const { id } = req.query;
 
-  const urls = [
-    `https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,recommendations,similar,videos,images,watch/providers,release_dates`,
-    // "https://movies-ratings2.p.rapidapi.com/ratings",
-  ];
+  const url = `https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,recommendations,similar,videos,images,watch/providers,release_dates`;
 
   try {
-    const details = await getFetch({ url: urls[0], headers: headers.TMDB });
+    const details = await getFetch({ url: url, headers: headers.TMDB });
 
-    const reviews = await Review.find({ movieId: id }).populate(
-      "userId",
-      ["userName", "picturePath"],
-      "User"
-    ).sort({_id:-1});
-
-    // const { ratings } = await getFetch({
-    //   url: urls[1],
-    //   params: { id },
-    //   headers: headers.RAPID,
-    // });
+    const reviews = await Review.find({ movieId: id })
+      .populate("userId", "userName", "User")
+      .sort({ medals: -1 });
 
     const response = { ...details, reviews };
     res.status(200).json(response);

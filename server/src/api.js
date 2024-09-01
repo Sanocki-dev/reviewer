@@ -13,6 +13,7 @@ import userRouter from "../src/routes/user.js";
 import authRouter from "../src/routes/auth.js";
 import movieRouter from "../src/routes/movies.js";
 import watchListRouter from "../src/routes/watchLists.js";
+import notificationRouter from "./routes/notifications.js";
 
 const app = express();
 
@@ -24,5 +25,7 @@ app.use("/", authRouter);
 app.use("/", userRouter);
 app.use("/", movieRouter);
 app.use("/", watchListRouter);
+app.use("/", notificationRouter);
 
-export const handler = serverless(app);
+app.listen(3001, () => console.log("PORT: " + 3001));
+// export const handler = serverless(app);

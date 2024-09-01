@@ -4,24 +4,66 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import WatchList from "../models/WatchList.js";
 
-// REGISTER USER //
+export const login = async (req, res) => {
+  try {
+    const { userName, password } = req.body;
+
+    const user = await User.findOne({ userName }).populate(
+      "following",
+      "userName",
+      "User"
+    );
+
+    if (!user)
+      return res.status(400).json({ message: "Invalid username or password." });
+
+    // Checks to see if the passwords match
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid username or password." });
+    createToken();
+
+    // Get all users data and return it with the initial login
+    const lists = await WatchList.find({ userId: user.id });
+
+    const userResponse = {
+      following: user.following,
+      followers: user.followers,
+      favorites: user.favorites,
+      seen: user.seen,
+      id: user._id,
+      picturePath: user.picturePath,
+      backdropPath: user.backdropPath,
+      medals: user.medals,
+      userName: user.userName,
+      watchlists: lists,
+    };
+
+    res.status(200).json({ user: userResponse, token: createToken(user._id) });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const register = async (req, res) => {
   try {
     const newUser = new User(req.body);
     await newUser.save();
 
     const userResponse = {
+      id: newUser._id,
       seen: [],
       favorites: [],
-      friends: [],
-      id: newUser._id,
-      picturePath: newUser.picturePath,
-      medals: newUser.medals,
+      following: [],
+      followers: [],
+      picturePath: "",
+      backdropPath: "",
+      medals: "",
       userName: newUser.userName,
     };
 
-    res.status(201).json({
-      success: "User Created",
+    res.status(200).json({
       user: userResponse,
       token: createToken(newUser._id),
     });
@@ -34,43 +76,6 @@ export const register = async (req, res) => {
       errors[key] = error.errors[key].message;
     });
     return res.status(400).send(errors);
-  }
-};
-
-// LOGGING IN //
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ email: "Email does not exist" });
-
-    // Checks to see if the passwords match
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ password: "Incorrect password" });
-    createToken();
-
-    // Get all users data and return it with the initial login
-    const lists = await WatchList.find(
-      { userId: user.id },
-      { name: 1, genre: 1 }
-    );
-
-    const userResponse = {
-      friends: user.friends,
-      seen: user.seen,
-      favorites: user.favorites,
-      id: user._id,
-      picturePath: user.picturePath,
-      medals: user.medals,
-      userName: user.userName,
-      watchlists: lists,
-    };
-
-    res.status(200).json({ user: userResponse, token: createToken(user._id) });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };
 
@@ -89,3 +94,38 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// REGISTER USER OLD //
+// export const register = async (req, res) => {
+//   try {
+//     const newUser = new User(req.body);
+//     await newUser.save();
+
+//     const userResponse = {
+//       id: newUser._id,
+//       seen: [],
+//       favorites: [],
+//       friends: [],
+//       picturePath: newUser.picturePath,
+//       medals: newUser.medals,
+//       userName: newUser.userName,
+//     };
+
+//     res.status(201).json({
+//       success: "User Created",
+//       user: userResponse,
+//       token: createToken(newUser._id),
+//     });
+//   } catch (error) {
+//     if (error.name !== "ValidationError")
+//       res.status(500).send("Something went wrong");
+
+//     let errors = {};
+//     Object.keys(error.errors).forEach((key) => {
+//       errors[key] = error.errors[key].message;
+//     });
+//     return res.status(400).send(errors);
+//   }
+// };
+
+// LOGGING IN OLD //
