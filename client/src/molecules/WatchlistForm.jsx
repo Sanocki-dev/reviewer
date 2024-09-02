@@ -71,7 +71,7 @@ const WatchlistForm = ({ user }) => {
         open={open}
         onClose={handleClose}
       >
-        {user?.watchlists.map(({ _id, name, movies, genre }) => (
+        {user?.watchlists?.map(({ _id, name, movies, genre }) => (
           <MenuItem key={_id} onClick={() => handleAdd(_id)} disableRipple>
             {name}
             <Typography
@@ -96,12 +96,12 @@ const WatchlistForm = ({ user }) => {
         <MenuItem
           onClick={openModal}
           disableRipple
-          disabled={user?.watchlists.length === 4}
+          disabled={user?.watchlists?.length === 4}
           sx={{ width: 230 }}
         >
         
           Add to new watchlist
-          {user?.watchlists.length === 4 ? (
+          {user?.watchlists?.length === 4 ? (
             <Typography
               variant="caption"
               sx={{ position: "absolute", bottom: -5 }}

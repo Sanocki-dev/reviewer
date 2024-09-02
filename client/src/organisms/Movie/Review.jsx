@@ -46,7 +46,7 @@ const Review = ({ data, onDelete, updateHandler, user }) => {
   }
 
   return (
-    <Container isMobile={isMobile} highlight={user.id === data.userId._id}>
+    <Container isMobile={isMobile} highlight={user?.id === data.userId._id}>
       <Box flex={1}>
         <Box
           display={"flex"}

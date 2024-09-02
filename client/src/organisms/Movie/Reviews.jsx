@@ -55,7 +55,8 @@ const Reviews = ({ user }) => {
 
   const following = useMemo(() => {
     if (!user) return undefined;
-    const followerIds = user?.following.map(({ _id }) => _id);
+    const followerIds = user?.following?.map(({ _id }) => _id);
+    
     return reviews.filter((review) => followerIds.includes(review.userId._id));
   }, [data]);
 
@@ -93,7 +94,7 @@ const Reviews = ({ user }) => {
       <ReviewFilters reviews={reviews} onSort={onSort} />
 
       <Box hidden={tab !== 1}>
-        {following.map((data, index) => {
+        {following?.map((data, index) => {
           if (index === userReview) return;
           return (
             <Review
@@ -114,7 +115,7 @@ const Reviews = ({ user }) => {
           alignItems: "center",
         }}
       >
-        {data.slice(0, loadAmount).map((data, index) => {
+        {data.slice(0, loadAmount)?.map((data, index) => {
           if (index === userReview) return;
           return (
             <Review

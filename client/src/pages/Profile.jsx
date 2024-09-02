@@ -17,7 +17,7 @@ import { updateUser } from "@/context";
 
 const ProfilePage = () => {
   const data = useLoaderData();
-  const { id, following } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -25,13 +25,14 @@ const ProfilePage = () => {
   if (!data) return;
 
   const canFollow = Boolean(
-    following.find(({ userName }) => userName === data.userName) == undefined
+    user?.following?.find(({ userName }) => userName === data.userName) ==
+      undefined
   );
 
   const onFollowHandler = async () => {
     try {
       const res = await GetPost("follow", {
-        userId: id,
+        userId: user.id,
         followerId: data._id,
       });
 
@@ -95,14 +96,16 @@ const ProfilePage = () => {
       </Box>
       <Box px={5} display={"flex"} gap={3} alignItems={"baseline"}>
         <Typography variant="h2">{data.userName}</Typography>
-        <Tooltip title="Follow this user for their updates.">
-          <Button
-            onClick={onFollowHandler}
-            startIcon={canFollow ? <PersonAdd /> : <PersonRemove />}
-          >
-            {canFollow ? "Follow" : "Unfollow"}
-          </Button>
-        </Tooltip>
+        {user?.id !== data._id && user && (
+          <Tooltip title="Follow this user for their updates.">
+            <Button
+              onClick={onFollowHandler}
+              startIcon={canFollow ? <PersonAdd /> : <PersonRemove />}
+            >
+              {canFollow ? "Follow" : "Unfollow"}
+            </Button>
+          </Tooltip>
+        )}
       </Box>
       {/* <Box sx={{ display: "flex", mt: 2 }}>
         <Box bgcolor={"red"} width={300}></Box>

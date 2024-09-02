@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
 import { Box, Link, Typography } from "@mui/material";
@@ -12,6 +12,7 @@ import Action from "@/atoms/Button";
 import { Login } from "@mui/icons-material";
 
 const AuthForm = ({ isLogin, handleClose }) => {
+  const [forgot, setForgot] = useState(false);
   const dispatch = useDispatch();
 
   let formik = useMemo(
@@ -88,6 +89,13 @@ const AuthForm = ({ isLogin, handleClose }) => {
                   component={"button"}
                   underline="none"
                   sx={{ width: 1, textAlign: "right", fontSize: "10pt" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setForgot(true);
+                    form.setErrors({
+                      server: "Well remember it next time idiot",
+                    });
+                  }}
                 >
                   Forgot password
                 </Link>

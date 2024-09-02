@@ -51,6 +51,7 @@ const Navigation = () => {
           startIcon={<Menu />}
           disableRipple
           onClick={handleClick}
+          disabled={false}
         />
         <SideBar isOpen={open} onClose={handleClose} links={links} />
       </>
