@@ -5,18 +5,17 @@ const ProviderChips = ({ title, provider }) => {
 
   return (
     <>
-      <Typography
-        variant="caption"
-        color="neutral.main"
-        mr={1}
-        my={1}
-        width={50}
-      >
+      <Typography variant="caption" color="neutral.main" width={50}>
         {title}
       </Typography>
-      <Box display="flex" gap={1} flexWrap={"wrap"}>
+      <Box display="flex" my={1} gap={1} flexWrap={"wrap"}>
         {provider.map(({ provider_id, provider_name }) => (
-          <Chip key={provider_id} label={provider_name} size="small" />
+          <Chip
+            color="primary"
+            variant="outlined"
+            key={provider_id}
+            label={provider_name}
+          />
         ))}
       </Box>
     </>

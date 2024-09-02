@@ -1,17 +1,28 @@
-import { userNotifications } from "../helper/index.js";
+import Notification from "../models/Notifications.js";
 import Review from "../models/Review.js";
+import User from "../models/User.js";
 
 // READ ALL //
 export const readReviews = async (req, res) => {
-  // const reviews = await Review.find().sort({ medals: -1 });
-  res.status(204).json("reviews");
-  // if (!reviews) res.status(404).json({ error: "No reviews yet" });
-  // res.status(200).json(reviews);
+  try {
+    const reviews = await Review.find().sort({ medals: 1 });
+    console.log("reviews");
+
+    if (!reviews) res.status(404).json({ error: "No reviews yet" });
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 // CREATE //
 export const createReview = async (req, res) => {
-  const { userId, movieId } = req.body;
+  const { userId, movieId, title, userName } = req.body;
+
+  const user = await User.findById(userId);
+
+  if (!user) return res.status(401).json({ error: "Unable to review." });
+
   const isNewReview = await Review.findOne({ userId, movieId });
 
   try {
@@ -21,13 +32,22 @@ export const createReview = async (req, res) => {
         .json({ error: "You already have a review for this movie." });
 
     const newReview = new Review(req.body);
-    const savedReview = await newReview.save();
 
-    const response = await Review.findOne(savedReview._id).populate(
-      "userId",
-      "userName",
-      "User"
-    );
+    await newReview.save();
+
+    // Create a notification
+    if (user.followers.length !== 0) {
+      const notifications = user.followers.map(({ _id }) => ({
+        user: _id,
+        type: "review",
+        ref: movieId,
+        message: `${userName} has a new review for ${title}.`,
+      }));
+
+      await Notification.insertMany(notifications);
+    }
+
+    const response = await newReview.populate("userId", "userName", "User");
 
     res.status(201).json(response);
   } catch (error) {
@@ -36,24 +56,30 @@ export const createReview = async (req, res) => {
 };
 
 // APPRAISE REVIEW //
-export const appraiseReview = async (req, res) => {
-  const _id = req.params.id;
-  const userId = req.params.userId;
+export const likeReview = async (req, res) => {
+  const { id, userId, userName, title } = req.body;
 
-  const review = await Review.findById(_id).populate(
-    "userId",
-    "userName",
-    "User"
-  );
+  const review = await Review.findById(id);
 
   if (!review) return;
 
   const searchMedals = review.medals.findIndex((id) => id === userId);
 
+  // Check if the person has already liked the review
   if (searchMedals !== -1) {
     review.medals.splice(searchMedals, 1);
   } else {
     review.medals.push(userId);
+
+    // Create a notification
+    const notification = new Notification({
+      user: review.userId,
+      ref: review.movieId,
+      type: "like",
+      message: `${userName} liked your review of ${title}.`,
+    });
+
+    await notification.save();
   }
 
   review.save();
@@ -61,7 +87,7 @@ export const appraiseReview = async (req, res) => {
   res.status(200).json(review);
 };
 
-// UPDATE //
+// UPDATE //~
 export const updateReview = async (req, res) => {
   const updates = Object.keys(req.body);
   const _id = req.params.id;
@@ -81,7 +107,7 @@ export const updateReview = async (req, res) => {
 
     // No Review found
     if (!review) return res.status(404).send();
-    userNotifications("review", review.userId._id);
+
     res.status(200).json(review);
   } catch (error) {
     res.status(400).json({ error: error.message });

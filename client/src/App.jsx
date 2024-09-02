@@ -9,43 +9,41 @@ import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
-import Layout from "@/layouts";
+import RootLayout from "@/templates/Root";
 import { themeSettings } from "@/theme";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import HomePage, { loader as HomeLoader } from "@/pages/HomePage";
-import SearchPage, { loader as SearchLoader } from "@/pages/SearchPage";
-import BrowsePage, { loader as BrowseLoader } from "@/pages/BrowsePage";
+import HomePage, { loader as HomeLoader } from "@/pages/Home";
+import MoviePage, { loader as MovieLoader } from "@/pages/Movie";
+import SearchPage, { loader as SearchLoader } from "@/pages/Search";
+import ProfilePage, { loader as ProfileLoader } from "@/pages/Profile";
+import TvPage from "@/pages/Tv";
+import PersonPage, { loader as PersonLoader } from "@/pages/Person";
+import ErrorPage from "@/pages/Error";
 
-import AuthPage from "@/pages/AuthPage";
-import FavoritesPage from "@/pages/FavoritesPage";
-import MoviePage, { loader as MovieLoader } from "@/pages/MoviePage";
-import { tokenLoader, checkAuthLoader } from "@/utils/auth";
+import { tokenLoader } from "@/utils/auth";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <RootLayout />,
     id: "root",
     loader: tokenLoader,
-    errorElement: { element: <HomePage />, loader: HomeLoader },
+    errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <HomePage />, loader: HomeLoader },
-      { path: "/browse", element: <BrowsePage />, loader: BrowseLoader },
       { path: "/search", element: <SearchPage />, loader: SearchLoader },
-      {
-        path: "/favorites",
-        element: <FavoritesPage />,
-        loader: checkAuthLoader,
-      },
+      { path: "/profile", element: <ProfilePage />, loader: ProfileLoader },
       { path: "/movie", element: <MoviePage />, loader: MovieLoader },
+      { path: "/tv", element: <TvPage /> },
+      { path: "/person", element: <PersonPage />, loader: PersonLoader },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
 ]);
 
-function App() {
+const App = () => {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); // Updates the theme and makes sure only to rerender when mode changes
 
@@ -53,21 +51,20 @@ function App() {
     <Box
       className="App"
       display="flex"
-      height="100vh"
-      bgcolor={"background.alt"}
-      overflow="hidden"
+      sx={{
+        minHeight: "100vh",
+      }}
     >
       <Formik>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
+            <CssBaseline enableColorScheme />
             <RouterProvider router={router} />
-            <AuthPage />
           </ThemeProvider>
         </GoogleOAuthProvider>
       </Formik>
     </Box>
   );
-}
+};
 
 export default App;

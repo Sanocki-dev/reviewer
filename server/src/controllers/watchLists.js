@@ -23,37 +23,38 @@ export const readWatchlists = async (req, res) => {
 // CREATE //
 export const createWatchlist = async (req, res) => {
   try {
-    const { userId, name, genre, movieId } = req.body;
+    const { userId, movie } = req.body;
     const user = await User.findById(userId);
+    const watchLists = await WatchList.find({ userId }).count();
 
     if (!user) return;
 
-    const watchlist = await WatchList.find({
-      userId,
-      name,
-    });
-
-    if (watchlist) {
-      res
-        .status(400)
-        .json({ message: "Watchlist already exists with this name." });
-      return;
+    if (watchLists >= 4) {
+      return res
+        .status(406)
+        .send({ server: "You have reached the limit of 4 watchlists" });
     }
 
     const newList = new WatchList({
-      name,
-      genre,
-      userId,
-      movies: [movieId],
+      ...req.body,
+      movies: [movie],
     });
 
     await newList.save();
 
     // Returns all the watchlists
-    const list = await WatchList.find().sort({ createdAt: -1 });
+    const list = await WatchList.find({ userId: user.id }).sort({
+      createdAt: -1,
+    });
     res.status(201).json(list);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    if (error.code === 11000) {
+      return res
+        .status(406)
+        .send({ name: "Watchlist with this name already exists" });
+    }
+
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -72,26 +73,26 @@ export const updateWatchlist = async (req, res) => {
     const watchlist = await WatchList.findById(_id);
     updates.forEach((update) => (watchlist[update] = req.body[update]));
 
-    if (watchlist.movies.includes(movie)) {
-      watchlist.movies = watchlist.movies.filter((id) => id !== movie);
+    // Remove movies from watchlists
+    if (watchlist.movies.findIndex(({ id }) => id === movie.id) >= 0) {
+      watchlist.movies = watchlist.movies.filter(({ id }) => id !== movie.id);
     } else {
       watchlist.movies.push(movie);
     }
-    
+
     await watchlist.save();
-    
+
     res.status(200).json(watchlist);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    res.status(201).json({ message: error.message });
   }
 };
 
 export const addRemoveMovies = async (req, res) => {
-  const { movie } = req.body;
+  const { lists, movie: _id } = req.body;
 
   try {
-    const { listId: _id, id: userId } = req.params;
-
+    const { id: userId } = req.params;
     const watchlist = await WatchList.find({ _id, userId });
 
     console.log(watchlist);

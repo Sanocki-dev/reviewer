@@ -15,17 +15,37 @@ export const colorTokens = {
     900: "#0A0A0A",
     1000: "#000000",
   },
+  background: {
+    50: "#E0E1DD",
+    100: "#535052",
+    200: "#494647",
+    300: "#343233",
+    400: "#151414",
+    500: "#0A0A0A",
+  },
   primary: {
-    50: "#E6FBFF",
-    100: "#CCF7FE",
-    200: "#99EEFD",
-    300: "#66E6FC",
-    400: "#33DDFB",
-    500: "#00D5FA",
-    600: "#00A0BC",
-    700: "#006B7D",
-    800: "#00353F",
-    900: "#001519",
+    50: "#EEE9D3",
+    100: "#E8E2C5",
+    200: "#E2DBB6",
+    300: "#D7CD98",
+    400: "#CCBF7B",
+    500: "#CBBF7A",
+    600: "#C0B15D",
+    700: "#B0A045",
+    800: "#938539",
+    900: "#766B2E",
+  },
+  secondary: {
+    50: "#FFFF3F",
+    100: "#EEEF20",
+    200: "#DDDF00",
+    300: "#D4D700",
+    400: "#BFD200",
+    500: "#AACC00",
+    600: "#80B918",
+    700: "#55A630",
+    800: "#2B9348",
+    900: "#007F5F",
   },
 };
 
@@ -38,8 +58,11 @@ export const themeSettings = (mode) => {
         ? {
             // palette values for dark mode
             primary: {
+              // contrastText: "#fff",
               dark: colorTokens.primary[200],
-              main: colorTokens.primary[500],
+              main: colorTokens.primary[700],
+              600: colorTokens.primary[600],
+              900: colorTokens.primary[900],
               light: colorTokens.primary[800],
             },
             neutral: {
@@ -50,15 +73,22 @@ export const themeSettings = (mode) => {
               light: colorTokens.grey[700],
             },
             background: {
-              default: colorTokens.grey[900],
-              alt: colorTokens.grey[800],
+              light: colorTokens.background[200],
+              main: colorTokens.background[500],
+              default: colorTokens.background[300],
+              alt: colorTokens.background[400],
+              transparent: '#ffffff05',
+
             },
           }
         : {
             // palette values for light mode
             primary: {
+              contrastText: "#fff",
               dark: colorTokens.primary[700],
-              main: colorTokens.primary[500],
+              main: colorTokens.primary[700],
+              600: colorTokens.primary[300],
+              900: colorTokens.primary[200],
               light: colorTokens.primary[50],
             },
             neutral: {
@@ -69,10 +99,18 @@ export const themeSettings = (mode) => {
               light: colorTokens.grey[50],
             },
             background: {
+              light: colorTokens.grey[100],
+              main: colorTokens.grey[100],
               default: colorTokens.grey[10],
-              alt: colorTokens.grey[0],
+              alt: colorTokens.grey[10],
+              transparent: '#ffffff50',
             },
           }),
+      secondary: {
+        dark: colorTokens.secondary[200],
+        main: colorTokens.secondary[500],
+        light: colorTokens.secondary[800],
+      },
     },
     typography: {
       fontFamily: ["Roboto", "sans-serif"].join(","),

@@ -9,7 +9,7 @@ import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { Formik } from "formik";
 
-import RootLayout from "@/templates";
+import RootLayout from "@new/Root";
 import { themeSettings } from "@/theme";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -28,20 +28,20 @@ const router = createBrowserRouter([
     path: "/",
     id: "root",
     element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    loader: tokenLoader,
-    children: [
-      { index: true, element: <HomePage />, loader: HomeLoader },
-      { path: "browse", element: <BrowsePage />, loader: BrowseLoader },
-      { path: "search", element: <SearchPage />, loader: SearchLoader },
-      {
-        path: "favorites",
-        element: <FavoritesPage />,
-        loader: checkAuthLoader,
-      },
-      { path: "movie", element: <MoviePage />, loader: MovieLoader },
-      { path: "*", element: <Navigate to="/" replace /> },
-    ],
+    // errorElement: <ErrorPage />,
+    // loader: tokenLoader,
+    // children: [
+    //   { index: true, element: <HomePage />, loader: HomeLoader },
+    //   { path: "browse", element: <BrowsePage />, loader: BrowseLoader },
+    //   { path: "search", element: <SearchPage />, loader: SearchLoader },
+    //   {
+    //     path: "favorites",
+    //     element: <FavoritesPage />,
+    //     loader: checkAuthLoader,
+    //   },
+    //   { path: "movie", element: <MoviePage />, loader: MovieLoader },
+    //   { path: "*", element: <Navigate to="/" replace /> },
+    // ],
   },
 ]);
 

@@ -6,7 +6,8 @@ const WatchListSchema = new Schema({
     required: true,
   },
   genre: {
-    type: String,
+    type: Array,
+    default: [],
   },
   userId: {
     type: String,
@@ -21,6 +22,8 @@ const WatchListSchema = new Schema({
     default: [],
   },
 });
+
+WatchListSchema.index({ name: 1, userId: 1 }, { unique: true });
 
 const WatchList = model("WatchList", WatchListSchema);
 

@@ -29,6 +29,7 @@ const AuthPage = () => {
   );
 
   const onSubmitHandler = (values) => {
+    console.log(values)
     dispatch(setLogin(values));
   };
 

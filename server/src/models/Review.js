@@ -6,6 +6,9 @@ const ReviewSchema = new Schema(
       type: String,
       required: true,
     },
+    title: {
+      type: String,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -26,7 +29,7 @@ const ReviewSchema = new Schema(
     },
     medals: {
       type: Array,
-      default: []
+      default: [],
     },
   },
   { timestamps: true }

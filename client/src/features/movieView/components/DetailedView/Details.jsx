@@ -1,7 +1,7 @@
 import { Box, Chip, Typography, Stack, Skeleton, Link } from "@mui/material";
 import { genres } from "@/data/Genres";
 import { useDispatch, useSelector } from "react-redux";
-import ProviderChips from "./ProviderChips";
+import ProviderChips from "../../../../molecules/ProviderChips";
 import { useNavigate } from "react-router-dom";
 import { setMovie } from "@/context";
 

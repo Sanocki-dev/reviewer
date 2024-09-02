@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Switch,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import axios from "axios";
 import { Form, useLoaderData } from "react-router-dom";
 import moment from "moment";
@@ -92,7 +84,7 @@ const MoviePage = () => {
 
   const onAppraiseHandler = async (id, index) => {
     if (!user) return;
-    
+
     try {
       let res = await axios.patch(
         `${import.meta.env.VITE_SITE_URL}review/${id}/${user?.id}`,
