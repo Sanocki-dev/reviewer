@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Notification from "../models/Notifications.js";
 
 // READ //
 export const getUserById = async (req, res) => {
@@ -14,11 +15,13 @@ export const getUserById = async (req, res) => {
 
 export const getUserByName = async (req, res) => {
   try {
-    const { userName } = req.body;
-    const user = await User.find(
-      { userName: { $regex: userName } },
-      { _id: 1, userName: 1, picturePath: 1 }
-    ).collation({ locale: "en", strength: 2 });
+    const { userName } = req.params;
+    const user = await User.findOne({
+      userName: { $regex: userName },
+    }).collation({
+      locale: "en",
+      strength: 2,
+    });
 
     res.status(200).json(user);
   } catch (error) {
@@ -40,7 +43,13 @@ export const patchUser = async (req, res) => {
   const updates = Object.keys(req.body);
 
   // Allowed updates
-  const allowedUpdates = ["userName", "email", "picturePath", "password"];
+  const allowedUpdates = [
+    "userName",
+    "email",
+    "picturePath",
+    "backdropPath",
+    "password",
+  ];
   const isValidUpdate = updates.every((key) => allowedUpdates.includes(key));
 
   if (!isValidUpdate)
@@ -60,20 +69,22 @@ export const patchUser = async (req, res) => {
   }
 };
 
-export const getUserFriends = async (req, res) => {
+export const getFollowers = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
 
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
+    const followers = await Promise.all(
+      user.followers.map((id) => User.findById(id))
     );
 
-    const formattedFriends = friends.map(({ _id, userName, picturePath }) => {
-      return { _id, userName, picturePath };
-    });
+    const formattedFollowers = followers.map(
+      ({ _id, userName, picturePath }) => {
+        return { _id, userName, picturePath };
+      }
+    );
 
-    res.status(200).json(formattedFriends);
+    res.status(200).json(formattedFollowers);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -83,7 +94,7 @@ export const getUserFriends = async (req, res) => {
 export const addRemoveLists = async (req, res) => {
   try {
     const { id } = req.params;
-    const { movieId, title, poster_path, type } = req.body;
+    const { id: movieId, title, poster_path, type } = req.body;
 
     const user = await User.findById(id);
     let hasDeleted = false;
@@ -110,31 +121,53 @@ export const addRemoveLists = async (req, res) => {
   }
 };
 
-// UPDATE //
-export const addRemoveFriend = async (req, res) => {
+export const addRemoveFollowing = async (req, res) => {
   try {
-    const { id, friendId } = req.params;
-    const user = await User.findById(id);
+    const { userId, followerId } = req.body;
+    const user = await User.findById(userId);
+    const follower = await User.findById(followerId);
 
-    // If they are friends remove them from each of them
-    if (user.friends.includes(friendId)) {
-      user.friends = user.friends.filter((id) => id !== friendId);
+    if (!user || !follower) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Is the user already following the person
+    if (user.following.includes(followerId)) {
+      // This is unfollowing
+      user.following = user.following.filter((id) => id === followerId);
+      follower.followers = follower.followers.filter((id) => id === userId);
     } else {
-      user.friends.push(friendId);
+      // This is following
+      user.following.push(followerId);
+      follower.followers.push(userId);
+
+      // Create a notification
+      const notification = new Notification({
+        user: followerId,
+        ref: user._id,
+        type: "follow",
+        message: `${user.userName} started following you.`,
+      });
+
+      await notification.save();
     }
 
     await user.save();
+    await follower.save();
 
-    const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
+    const following = await Promise.all(
+      user.following.map((id) => User.findById(id))
     );
 
-    const formattedFriends = friends.map(({ _id, userName, picturePath }) => {
-      return { _id, userName, picturePath };
-    });
+    const formattedFollowing = following.map(
+      ({ _id, userName, picturePath }) => {
+        return { _id, userName, picturePath };
+      }
+    );
 
-    res.status(200).json(formattedFriends);
+    res.status(200).json(formattedFollowing);
   } catch (error) {
     res.status(404).json({ message: error.message });
+    console.log(error);
   }
 };

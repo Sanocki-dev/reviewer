@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
 
 const WatchListSchema = new Schema({
   name: {
@@ -7,7 +6,8 @@ const WatchListSchema = new Schema({
     required: true,
   },
   genre: {
-    type: String,
+    type: Array,
+    default: [],
   },
   userId: {
     type: String,

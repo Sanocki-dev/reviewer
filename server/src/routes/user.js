@@ -1,20 +1,20 @@
 import { Router } from "express";
 import {
   addRemoveLists,
-  addRemoveFriend,
   getUserById,
   getUserByName,
   patchUser,
   postUser,
+  addRemoveFollowing,
 } from "../controllers/users.js";
 
 const userRouter = new Router();
 
-userRouter.get("/user/:id", getUserById);
-userRouter.get("/user", getUserByName);
+userRouter.get("/userName/:userName", getUserByName);
 userRouter.post("/user", postUser);
+userRouter.get("/user/:id", getUserById);
 userRouter.patch("/user/:id", patchUser);
 userRouter.patch("/:id/lists", addRemoveLists);
-userRouter.patch("/:id/friends/:friendId", addRemoveFriend);
+userRouter.post("/follow", addRemoveFollowing);
 
 export default userRouter;

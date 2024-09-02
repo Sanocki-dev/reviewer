@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
-import uniqueValidator from 'mongoose-unique-validator'
+import uniqueValidator from "mongoose-unique-validator";
+const Schema = mongoose.Schema;
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = Schema(
   {
     userName: {
       type: String,
@@ -12,13 +13,14 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       minlength: 4,
       maxlength: 15,
-      unique: true
+      unique: true,
     },
     email: {
       type: String,
       required: true,
       uniqueCaseInsensitive: true,
       trim: true,
+      select: false,
       lowercase: true,
       unique: true,
       validate(value) {
@@ -30,9 +32,14 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      select: false,
       minlength: [6, "Must be at least 6 characters"],
     },
     picturePath: {
+      type: String,
+      default: "",
+    },
+    backdropPath: {
       type: String,
       default: "",
     },
@@ -44,10 +51,18 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    friends: {
-      type: Array,
-      default: [],
-    },
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     medals: {
       type: Array,
       default: [],
@@ -56,21 +71,17 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.plugin(uniqueValidator, {message: "Already in use"})
+UserSchema.plugin(uniqueValidator, { message: "Already in use" });
 
 UserSchema.pre("save", async function (next) {
-  const user = this;
-
   // Hashes the password whenever user is created/updated
-  if (user.isModified("password")) {
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(user.password, salt);
-    user.password = passwordHash;
+  if (this.isModified("password")) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
   }
 
   next();
 });
-
 
 const User = mongoose.model("User", UserSchema);
 
