@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import Notification from "../models/Notifications.js";
+import { createNotification } from "../helper/index.js";
+import Review from "../models/Review.js";
 
 // READ //
 export const getUserById = async (req, res) => {
@@ -17,13 +19,12 @@ export const getUserByName = async (req, res) => {
   try {
     const { userName } = req.params;
     const user = await User.findOne({
-      userName: { $regex: userName },
-    }).collation({
-      locale: "en",
-      strength: 2,
+      userName,
     });
 
-    res.status(200).json(user);
+    const reviews = await Review.find({ userId: user._id });
+
+    res.status(200).json({ user, reviews });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -96,24 +97,28 @@ export const addRemoveLists = async (req, res) => {
     const { id } = req.params;
     const { id: movieId, title, poster_path, type } = req.body;
 
-    const user = await User.findById(id);
-    let hasDeleted = false;
-
-    // No or user
-    if (!movieId || !user) res.status(404).send();
-
-    user[type].find((o, i) => {
-      if (o?.id === movieId) {
-        user[type].splice(i, 1);
-        hasDeleted = true;
-        return true;
-      }
-    });
-
-    if (!hasDeleted) {
-      user[type].push({ id: movieId, title, poster_path });
+    if (!movieId || !type || !["favorites", "seen"].includes(type)) {
+      return res.status(400).json({ message: "Invalid request data" });
     }
 
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Get the current list based on the type
+    const currentList = user[type] || [];
+
+    // Filter out the movieId if it exists in the list
+    const updatedList = currentList.filter(
+      (listing) => listing.id !== movieId.toString()
+    );
+
+    // Add the item if it was not removed
+    if (updatedList.length === currentList.length) {
+      updatedList.push({ id: movieId, title, poster_path });
+    }
+
+    // Update the user's list and save
+    user[type] = updatedList;
     await user.save();
     res.status(200).json(user[type]);
   } catch (error) {
@@ -124,6 +129,10 @@ export const addRemoveLists = async (req, res) => {
 export const addRemoveFollowing = async (req, res) => {
   try {
     const { userId, followerId } = req.body;
+
+    if (userId === followerId)
+      return res.status(404).json({ message: "Cannot follow yourself." });
+
     const user = await User.findById(userId);
     const follower = await User.findById(followerId);
 
@@ -131,41 +140,42 @@ export const addRemoveFollowing = async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Is the user already following the person
-    if (user.following.includes(followerId)) {
+    // Is the user already being followed by the person
+    if (user.followers.some((id) => id.toString() === followerId.toString())) {
       // This is unfollowing
-      user.following = user.following.filter((id) => id === followerId);
-      follower.followers = follower.followers.filter((id) => id === userId);
+      user.followers = user.followers.filter(
+        (id) => id.toString() !== followerId
+      );
+      follower.following = follower.following.filter(
+        (id) => id.toString() !== userId
+      );
     } else {
       // This is following
-      user.following.push(followerId);
-      follower.followers.push(userId);
+      user.followers.push(followerId);
+      follower.following.push(userId);
 
-      // Create a notification
-      const notification = new Notification({
-        user: followerId,
-        ref: user._id,
+      createNotification({
+        user: user._id,
+        ref: followerId,
         type: "follow",
-        message: `${user.userName} started following you.`,
+        message: `${follower.userName} started following you.`,
       });
-
-      await notification.save();
     }
 
     await user.save();
     await follower.save();
 
-    const following = await Promise.all(
-      user.following.map((id) => User.findById(id))
-    );
+    // const following = await Promise.all(
+    //   user.following.map((id) => User.findById(id))
+    // );
 
-    const formattedFollowing = following.map(
-      ({ _id, userName, picturePath }) => {
-        return { _id, userName, picturePath };
-      }
-    );
+    // const formattedFollowing = following.map(
+    //   ({ _id, userName, picturePath }) => {
+    //     return { _id, userName, picturePath };
+    //   }
+    // );
 
-    res.status(200).json(formattedFollowing);
+    res.status(200).json(follower.following);
   } catch (error) {
     res.status(404).json({ message: error.message });
     console.log(error);

@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-export const validNotifications = ['follow', 'like', 'comment', 'review', 'watchlist'];
+export const validNotifications = [
+  "follow",
+  "like",
+  "comment",
+  "review",
+  "watchlist",
+];
 
 const notificationSchema = new Schema({
   user: {
@@ -30,6 +36,7 @@ const notificationSchema = new Schema({
     default: Date.now,
   },
 });
+notificationSchema.index({ message: 1, type: 1, user: 1 }, { unique: true });
 
 const Notification = mongoose.model("Notification", notificationSchema);
 

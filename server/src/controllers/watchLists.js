@@ -28,7 +28,6 @@ export const createWatchlist = async (req, res) => {
     const watchLists = await WatchList.find({ userId }).count();
 
     if (!user) return;
-
     if (watchLists >= 4) {
       return res
         .status(406)
@@ -48,6 +47,7 @@ export const createWatchlist = async (req, res) => {
     });
     res.status(201).json(list);
   } catch (error) {
+    console.log(error)
     if (error.code === 11000) {
       return res
         .status(406)

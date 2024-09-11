@@ -10,7 +10,7 @@ const WatchListSchema = new Schema({
     default: [],
   },
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
   },
   movies: {
@@ -18,12 +18,12 @@ const WatchListSchema = new Schema({
     default: [],
   },
   partners: {
-    type: Array,
+    type: [Schema.Types.ObjectId],
     default: [],
   },
 });
 
-WatchListSchema.index({ name: 1, userId: 1 }, { unique: true });
+WatchListSchema.index({ userId: 1, name: 1 }, { unique: true });
 
 const WatchList = model("WatchList", WatchListSchema);
 

@@ -139,6 +139,13 @@ export const getAllMovieDetails = async (req, res) => {
       .populate("userId", "userName", "User")
       .sort({ medals: -1 });
 
+    reviews.forEach(async ({ _id, userId }) => {
+      if (userId === null) {
+        const deleted = await Review.deleteOne({ _id });
+        console.log(deleted);
+      }
+    });
+
     const response = { ...details, reviews };
     res.status(200).json(response);
   } catch (error) {

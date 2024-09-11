@@ -19,7 +19,6 @@ const app = express();
 
 app.use(json());
 app.use(cors());
-
 app.use("/", reviewRouter);
 app.use("/", authRouter);
 app.use("/", userRouter);
