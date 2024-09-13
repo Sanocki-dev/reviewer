@@ -23,7 +23,7 @@ export const getUserByName = async (req, res) => {
     });
 
     const reviews = await Review.find({ userId: user._id });
-
+    
     res.status(200).json({ user, reviews });
   } catch (error) {
     res.status(404).json({ message: error.message });

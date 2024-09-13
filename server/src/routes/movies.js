@@ -11,7 +11,7 @@ movieRouter.get("/movie", getAllMovieDetails);
 
 
 movieRouter.get("/person", getPerson);
-movieRouter.get("/show", getShow);
+movieRouter.get("/tv", getShow);
 
 
 export default movieRouter;

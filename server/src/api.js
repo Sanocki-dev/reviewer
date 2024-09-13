@@ -26,5 +26,5 @@ app.use("/", movieRouter);
 app.use("/", watchListRouter);
 app.use("/", notificationRouter);
 
-app.listen(3001, () => console.log("PORT: " + 3001));
-// export const handler = serverless(app);
+// app.listen(3001, () => console.log("PORT: " + 3001));
+export const handler = serverless(app);

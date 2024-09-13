@@ -36,7 +36,7 @@ export const sendOTP = async (email) => {
     };
 
     // Send the email
-    // const response = await sgMail.send(msg);
+    const response = await sgMail.send(msg);
     return OTP;
   } catch (error) {
     console.error("Error sending email:", error);

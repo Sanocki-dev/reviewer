@@ -11,35 +11,31 @@ export const login = async (req, res) => {
   try {
     const { userName, password } = req.body;
 
-    let user = null;
-
-    // Login with email or userName
-    if (userName)
-      user = await User.findOne({
-        $or: [{ email: userName }, { userName }],
-      }).select("+password");
-    else user = await User.findOne({ userName }).select("+password");
+    let user = await User.findOne({ userName }).select("+password");
 
     if (!user)
-      return res.status(400).json({ message: "Invalid username or password." });
+      return res
+        .status(400)
+        .json({ userName: "Invalid username or password." });
 
     let isValid = await bcrypt.compare(password, user.password);
 
     // Checks to see if the user is using a OTP
-    if (user.resetPasswordOTP) {
+    if (password === user.resetPasswordOTP) {
       const isWithinTime = new Date() < user.resetPasswordExpire;
-
       if (!isWithinTime) {
         return res
           .status(400)
           .json({ password: "One-Time-Passcode expired. Please try again." });
       }
 
-      isValid = password === user.resetPasswordOTP;
+      isValid = true;
     }
 
     if (!isValid) {
-      return res.status(400).json({ message: "Invalid username or password." });
+      return res
+        .status(400)
+        .json({ userName: "Invalid username or password." });
     }
 
     user.resetPasswordOTP = undefined;
@@ -50,15 +46,7 @@ export const login = async (req, res) => {
     const lists = await WatchList.find({ userId: user.id });
 
     const userResponse = {
-      following: user.following,
-      followers: user.followers,
-      favorites: user.favorites,
-      seen: user.seen,
-      id: user._id,
-      picturePath: user.picturePath,
-      backdropPath: user.backdropPath,
-      medals: user.medals,
-      userName: user.userName,
+      ...user._doc,
       watchlists: lists,
     };
 
